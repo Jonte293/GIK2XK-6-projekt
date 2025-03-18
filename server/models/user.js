@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         firstName: DataTypes.STRING(50),
         lastName: DataTypes.STRING(50),
-        description: DataTypes.TEXT,
         password: {
             type: DataTypes.STRING(50),
             validate: {

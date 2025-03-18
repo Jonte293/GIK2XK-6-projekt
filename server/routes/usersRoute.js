@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../models');
 const validate = require('validate.js');
-const postService = require('../services/postService');
+const userService = require('../services/userService');
 
 const constraints = {
   email: {
@@ -22,18 +22,13 @@ const constraints = {
       tooShort: '^Användarnamnet måste vara minst %{count} tecken långt.',
       tooLong: '^Användarnamnet får inte vara längre än %{count} tecken långt.'
     }
-  },
-  imageUrl: {
-    url: {
-      message: '^Sökvägen är felaktig.'
-    }
   }
 };
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/carts', (req, res) => {
   const id = req.params.id;
 
-  postService.getByAuthor(id).then((result) => {
+  userService.getByAuthor(id).then((result) => {
     res.status(result.status).json(result.data);
   });
 });
@@ -68,7 +63,7 @@ router.put('/', (req, res) => {
         where: { id: user.id }
       })
       .then((result) => {
-        res.send('Inlägget har uppdaterats.');
+        res.send('Användaren har uppdaterats.');
       });
   }
 });
@@ -78,7 +73,7 @@ router.delete('/', (req, res) => {
       where: { id: req.body.id }
     })
     .then(() => {
-      res.json(`Inlägget raderades`);
+      res.json(`Användaren raderades`);
     });
 });
 

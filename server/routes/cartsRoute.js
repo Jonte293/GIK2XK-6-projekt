@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const postService = require('../services/postService');
+const userService = require('../services/userService');
 
-router.post('/:id/addComment', (req, res) => {
-    const comment = req.body;
+router.post('/:id/addProduct', (req, res) => {
+    const product = req.body;
     const id = req.params.id;
   
-    postService.addComment(id, comment).then((result) => {
+    userService.addProduct(id, product).then((result) => {
       res.status(result.status).json(result.data);
     });
   });
@@ -13,39 +13,38 @@ router.post('/:id/addComment', (req, res) => {
   router.get('/:id', (req, res) => {
     const id = req.params.id;
   
-    postService.getById(id).then((result) => {
+    userService.getById(id).then((result) => {
       res.status(result.status).json(result.data);
     });
   });
   
   router.get('/', (req, res) => {
-    postService.getAll().then((result) => {
+    userService.getAll().then((result) => {
       res.status(result.status).json(result.data);
     });
   });
   
   router.post('/', (req, res) => {
-    const post = req.body;
-    postService.create(post).then((result) => {
+    const cart = req.body;
+    userService.create(cart).then((result) => {
       res.status(result.status).json(result.data);
     });
   });
   
   router.put('/', (req, res) => {
-    const post = req.body;
-    const id = post.id;
+    const cart = req.body;
+    const id = cart.id;
   
-    postService.update(post, id).then((result) => {
+    userService.update(cart, id).then((result) => {
       res.status(result.status).json(result.data);
     });
   });
   
   router.delete('/', (req, res) => {
     const id = req.body.id;
-    postService.destroy(id).then((result) => {
+    userService.destroy(id).then((result) => {
       res.status(result.status).json(result.data);
     });
   });
   
   module.exports = router;
-  

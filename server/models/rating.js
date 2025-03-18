@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         score: {
             type: DataTypes.INTEGER,
             validate: {
-              min: 1,  // Minsta värde 1
-              max: 5   // Högsta värde 5
+              min: 1,  
+              max: 5   
             }
         },
         review: {

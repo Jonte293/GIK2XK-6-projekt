@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         price: {
             type: DataTypes.DECIMAL(10, 2),
-            allownull: false
+            allowNull: false
         },
-        description: DataTypes.TEXT(255),
+        description: DataTypes.TEXT,
         imageUrl: {
            type: DataTypes.STRING(255),
            validate: {
