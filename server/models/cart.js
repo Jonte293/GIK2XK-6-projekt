@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('tag', {
+    return sequelize.define('cart', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        name: {
-            type: DataTypes.STRING(50),
+        payed: {
+            type: DataTypes.BOOLEAN,
             allowNull: false
         }
     },  { underscored: true }

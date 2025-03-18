@@ -22,12 +22,13 @@ module.exports = (sequelize, DataTypes) => {
         firstName: DataTypes.STRING(50),
         lastName: DataTypes.STRING(50),
         description: DataTypes.TEXT,
-        imageUrl: {
-           type: DataTypes.STRING(50),
-           validate: {
-            isUrl: true
-           }
-        } 
+        password: {
+            type: DataTypes.STRING(50),
+            validate: {
+                len: [6, 50]
+            }
+        },
+
     },  { underscored: true }
 );
 };
