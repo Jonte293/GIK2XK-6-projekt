@@ -18,10 +18,17 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   const product = req.body;
-  db.product.create(product).then((result) => {
+  productService.create(product).then((result) => {
     res.send(result);
   });
 });
+
+/* router.post('/', (req, res) => {
+  const cart = req.body;
+  cartService.create(cart).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+}); */
 
 router.delete('/', (req, res) => {
   db.product
@@ -29,8 +36,18 @@ router.delete('/', (req, res) => {
       where: { id: req.body.id }
     })
     .then(() => {
-      res.json(`Inlägget raderades`);
+      res.json(`Produkten raderades`);
     });
 });
+
+router.put('/', (req, res) => {
+  const product= req.body;
+  const id = product.id;
+
+  productService.update(product, id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+});
+
 
 module.exports = router;

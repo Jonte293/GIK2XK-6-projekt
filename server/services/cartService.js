@@ -86,10 +86,17 @@ async function getAll() {
   
     if (products) {
       products.forEach(async (product) => {
-        const productId = await _findOrCreateTagId(product);
+        const productId = await _findOrCreateProductId(product);
         await post.addProduct(productId);
       });
     }
+  }
+
+  async function _findOrCreateProductId(name) {
+    name = name.toLowerCase().trim();
+    const foundOrCreatedProduct = await db.product.findOrCreate({ where: { name } });
+  
+    return foundOrCreatedProduct[0].id;
   }
   
       function _formatCart(cart) {

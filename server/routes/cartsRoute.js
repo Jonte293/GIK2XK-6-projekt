@@ -24,8 +24,6 @@ router.post('/:id/addProduct', (req, res) => {
     });
   });
   
-
-
 router.post('/', (req, res) => {
   const cart = req.body;
   cartService.create(cart).then((result) => {
