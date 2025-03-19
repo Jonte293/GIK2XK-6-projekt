@@ -43,7 +43,7 @@ db.user.hasMany(db.cart, {
   onDelete: 'CASCADE'
 });
 
-db.cartRow.belongsTo(db.cart, { foreignKey: { allowNull: false } });
+/* db.cartRow.belongsTo(db.cart, { foreignKey: { allowNull: false } });
 db.cart.hasMany(db.cartRow, {
   allowNull: false,
   onDelete: 'CASCADE'
@@ -53,7 +53,7 @@ db.cartRow.belongsTo(db.product, { foreignKey: { allowNull: false } });
 db.product.hasMany(db.cartRow, {
   allowNull: false,
   onDelete: 'CASCADE'
-});
+}); */
 
 db.product.belongsTo(db.category, { foreignKey: { allowNull: false } });
 db.category.hasMany(db.product, {
@@ -73,8 +73,8 @@ db.user.hasMany(db.rating, {
   onDelete: 'CASCADE'
 });
 
-/* db.product.belongsToMany(db.cart, { through: db.cartRow });
-db.cart.belongsToMany(db.product, { through: db.cartRow }); */
+db.product.belongsToMany(db.cart, { through: db.cartRow });
+db.cart.belongsToMany(db.product, { through: db.cartRow });
 
 
 db.sequelize = sequelize;
