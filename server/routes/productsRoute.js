@@ -5,20 +5,27 @@ const productService = require('../services/productService');
 router.get('/:id/products', (req, res) => {
   const id = req.params.id;
 
-  postService.getByProduct(id).then((result) => {
+  productService.getById(id).then((result) => {
     res.status(result.status).json(result.data);
   });
 });
 
 router.get('/', (req, res) => {
-  db.product.findAll().then((result) => {
-    res.send(result);
+  productService.getAll().then((result) => {
+    res.status(result.status).json(result.data);
   });
 });
 
+
+/* router.get('/', (req, res) => {
+  db.product.findAll().then((result) => {
+    res.send(result);;
+  });
+}); */
+
 router.post('/', (req, res) => {
   const product = req.body;
-  productService.create(product).then((result) => {
+  db.product.create(product).then((result) => {
     res.send(result);
   });
 });

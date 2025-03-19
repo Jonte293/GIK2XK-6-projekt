@@ -1,11 +1,10 @@
 const router = require('express').Router();
 const db = require('../models');
-const categoryService = require('../services/categoryService');
+const productService = require('../services/productService');
 
 router.get('/:name/categories', (req, res) => {
   const name = req.params.name;
-
-  categoryService.getByCategory(name).then((result) => {
+  productService.getByCategory(name).then((result) => {
     res.status(result.status).json(result.data);
   });
 });
