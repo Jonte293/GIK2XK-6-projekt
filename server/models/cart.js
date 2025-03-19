@@ -3,12 +3,15 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            allowNull: false
         },
         payed: {
             type: DataTypes.BOOLEAN,
             allowNull: false
-        }
+        },
+        
     },  { underscored: true }
 );
 };
+

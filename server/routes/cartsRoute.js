@@ -24,13 +24,31 @@ router.post('/:id/addProduct', (req, res) => {
     });
   });
   
-  router.post('/', (req, res) => {
+/*   router.post('/', (req, res) => {
     const cart = req.body;
     userService.create(cart).then((result) => {
       res.status(result.status).json(result.data);
     });
+  }); */
+
+/*   router.post('/', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const result = await userService.createCart(userId);
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        res.status(500).json({ error: 'Kunde inte skapa varukorgen' });
+    }
+}); */
+
+router.post('/', (req, res) => {
+  const cart = req.body;
+  userService.create(cart).then((result) => {
+    res.status(result.status).json(result.data);
   });
-  
+});
+
+
   router.put('/', (req, res) => {
     const cart = req.body;
     const id = cart.id;
