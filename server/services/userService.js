@@ -41,24 +41,25 @@ async function getByUser(userId) {
   }
 
 
-  async function addRating(userId, productId, score, review) {
-    if (!userId || !productId) {
-      return createResponseError(422, 'User ID och Product ID Ã¤r obligatoriska');
-    }
+/*   async function addRating(rating) {
     try {
-      // Skapa rating i databasen
-      const newRating = await db.rating.create({
-        userId: userId,
-        productId: productId,
-        score: score,
-        review: review
-      });
+      const newRating = await db.rating.create(rating);
+      await _addRatingToProduct(newRating, rating.product);
   
-      return createResponseSuccess(newRating);
+      return createResponseSuccess(newProduct);
     } catch (error) {
-      return createResponseError(500, 'Kunde inte skapa rating');
+      return createResponseError(error.status, error.message);
     }
   }
+
+  async function _addRatingToProduct(categories) {
+    if (categories) {
+      categories.forEach(async (category) => {
+        const categoryId = await _findOrCreateCategoryId(category);
+        await post.addCategory(categoryId);
+      });
+    }
+  }  */
 
 module.exports = {
     getByUser,
