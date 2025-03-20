@@ -63,8 +63,7 @@ async function getByUser(userId) {
 
 module.exports = {
     getByUser,
-    getById,
-    addRating,
+    getById
   };
   
 
