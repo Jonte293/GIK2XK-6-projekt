@@ -48,8 +48,8 @@ async function getByUser(userId) {
     try {
       // Skapa rating i databasen
       const newRating = await db.rating.create({
-        user_id: userId,
-        product_id: productId,
+        userId: userId,
+        productId: productId,
         score: score,
         review: review
       });

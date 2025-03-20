@@ -70,9 +70,6 @@ const {
       return foundOrCreatedCategory[0].id;
     }
 
-
-
-
 /*         Fick hjälp av chatgpt att lösa denna:
         Prompt till chatgpt: {
             "status": 500,
@@ -82,7 +79,7 @@ const {
         }
         Svar: "The error "categories.forEach is not a function" indicates that categories is not an array in your code, but you are trying to use .forEach() on it."
         Fick sedan hjälp att göra categories till en array*/
-        async function _addCategoryToProduct(product, categories) {
+/*         async function _addCategoryToProduct(product, categories) {
             if (!categories) return; 
           
             categories = Array.isArray(categories) ? categories : [categories];
@@ -91,17 +88,16 @@ const {
               const categoryId = await _findOrCreateCategoryId(category);
               await product.addCategory(categoryId);
             }
-          }
+          } */
 
-/*           async function _addCategoryToProduct(categories) {
+          async function _addCategoryToProduct(categories) {
             if (categories) {
               categories.forEach(async (category) => {
                 const categoryId = await _findOrCreateCategoryId(category);
                 await post.addCategory(categoryId);
               });
             }
-          } */
-  
+          }
   
           function _formatProduct(product) {
             const cleanProduct = {
@@ -117,16 +113,25 @@ const {
                 name: product.category.name,
               }
             };
-          
-/*             if (product.categories) {
-              product.products.map((product) => {
-                return (cleanProduct.products = [product.name, ...cleanProduct.products]);
-              }); */
               return cleanProduct;
-            //}
           }
 
-        async function getByCategory(categoryId) {
+            async function getById(id) {
+    try {
+      const product = await db.product.findOne({
+        where: { id },
+        include: [
+          db.category,
+        ]
+      });
+      /* Om allt blev bra, returnera post */
+      return createResponseSuccess(_formatProduct(product));
+    } catch (error) {
+      return createResponseError(error.status, error.message);
+    }
+  }  
+
+/*         async function getByCategory(categoryId) {
           try {
             const category = await db.category.findOne({ where: { id: categoryId } });
             const allProducts = await category.getProducts({ include: [db.product, db.category] });
@@ -135,7 +140,32 @@ const {
           } catch (error) {
             return createResponseError(error.status, error.message);
           }
-        }
+        } */
+
+          async function getByCategory(categoryName) {
+            try {
+  
+              const category = await db.category.findOne({
+                where: { name: categoryName }
+              });
+  
+              if (!category) {
+                return createResponseError(404, 'Kategorin hittades inte.')
+              }
+  
+              const products = await db.product.findAll({where: {category_id: category.id}, include: [db.category]
+              });
+  
+              if (products.length === 0) {
+  
+                return createResponseError(404, 'Inga produkter hittades för denna kategori.');
+              }
+  
+              return createResponseSuccess(products.map((product) => _formatProduct(product)));
+            } catch (error) {
+              return createResponseError(error.status, error.message);
+            }
+          }
 
       module.exports = {
         create,
