@@ -28,7 +28,7 @@ const constraints = {
 router.get('/:id/carts', (req, res) => {
   const id = req.params.id;
 
-  userService.getByAuthor(id).then((result) => {
+  userService.getByUser(id).then((result) => {
     res.status(result.status).json(result.data);
   });
 });

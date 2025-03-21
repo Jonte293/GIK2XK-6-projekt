@@ -2,6 +2,15 @@ const router = require('express').Router();
 const db = require('../models');
 const productService = require('../services/productService');
 
+router.post('/:id/addRating', (req, res) => {
+  const rating = req.body;
+  const id = req.params.id;
+
+  productService.addRating(id, rating).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+});
+
 router.get('/:id/products', (req, res) => {
   const id = req.params.id;
 

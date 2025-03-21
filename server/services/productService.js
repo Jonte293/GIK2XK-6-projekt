@@ -39,7 +39,7 @@ const {
 
   async function getAll() {
       try {
-        const allProducts = await db.product.findAll({ include: [db.category]/* , attributes: ['category_id', 'name'] */ });
+        const allProducts = await db.product.findAll({ include: [db.category, db.rating]});
         /* Om allt blev bra, returnera allPosts */
         return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
       } catch (error) {
@@ -111,10 +111,31 @@ const {
               category: {
                 id: product.category.id,
                 name: product.category.name,
-              }
+              },
+/*               user: {
+                id: rating.user.id,
+                username: rating.user.username
+              } */
             };
-              return cleanProduct;
+            if (product.ratings) {
+              cleanProduct.ratings = [];
+          
+              product.ratings.map((rating) => {
+                return (cleanProduct.ratings = [
+                  {
+                    score: rating.score,
+                    review: rating.review,
+                    user: rating.user.id,
+                    createdAt: rating.scoreedAt
+                  },
+                  ...cleanProduct.ratings
+                ]);
+              });
           }
+
+            return cleanProduct;
+          
+        }
 
             async function getById(id) {
     try {
@@ -122,6 +143,10 @@ const {
         where: { id },
         include: [
           db.category,
+          {
+            model: db.rating,
+            include: [db.user]
+          }
         ]
       });
       /* Om allt blev bra, returnera post */
@@ -167,10 +192,24 @@ const {
             }
           }
 
+      async function addRating(id, rating) {
+        if (!id) {
+          return createResponseError(422, 'Id är obligatoriskt');
+        }
+        try {
+          rating.postId = id;
+          const newRating = await db.rating.create(rating);
+          return createResponseSuccess(newRating);
+        } catch (error) {
+          return createResponseError(error.status, error.message);
+        }
+      }    
+
       module.exports = {
         create,
         update,
         getAll,
         getById,
-        getByCategory
+        getByCategory,
+        addRating
       };
