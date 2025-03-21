@@ -11,7 +11,7 @@ router.post('/:id/addRating', (req, res) => {
   });
 });
 
-router.get('/:id/products', (req, res) => {
+router.get('/:id/', (req, res) => {
   const id = req.params.id;
 
   productService.getById(id).then((result) => {

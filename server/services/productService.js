@@ -37,23 +37,45 @@ const {
     }
   
 
-  async function getAll() {
+ /*  async function getAll() {
       try {
-        const allProducts = await db.product.findAll({ include: [db.category, db.rating]});
-        /* Om allt blev bra, returnera allPosts */
+        const allProducts = await db.product.findAll({ include: [db.category, db.rating, db.user]});
+        
         return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
       } catch (error) {
         return createResponseError(error.status, error.message);
       }
-    }
+    } */
+
+      async function getAll() {
+        try {
+          const allProducts = await db.product.findAll({ 
+            include: [
+              db.category,
+              {
+                model: db.rating,
+                include: [ db.user]
+              }
+            ]
+          });
+          /* Om allt blev bra, returnera allPosts */
+          return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
+        } catch (error) {
+          return createResponseError(error.status, error.message);
+        }
+      }
 
   async function getById(id) {
     try {
       const product = await db.product.findOne({
         where: { id },
-        include: [
-          db.category,
-        ]
+            include: [
+              db.category,
+              {
+                model: db.rating,
+                include: [ db.user]
+              }
+            ]
       });
       /* Om allt blev bra, returnera post */
       return createResponseSuccess(_formatProduct(product));
@@ -70,25 +92,6 @@ const {
       return foundOrCreatedCategory[0].id;
     }
 
-/*         Fick hjälp av chatgpt att lösa denna:
-        Prompt till chatgpt: {
-            "status": 500,
-            "data": {
-                "error": "categories.forEach is not a function"
-            }
-        }
-        Svar: "The error "categories.forEach is not a function" indicates that categories is not an array in your code, but you are trying to use .forEach() on it."
-        Fick sedan hjälp att göra categories till en array*/
-/*         async function _addCategoryToProduct(product, categories) {
-            if (!categories) return; 
-          
-            categories = Array.isArray(categories) ? categories : [categories];
-          
-            for (const category of categories) {
-              const categoryId = await _findOrCreateCategoryId(category);
-              await product.addCategory(categoryId);
-            }
-          } */
 
           async function _addCategoryToProduct(categories) {
             if (categories) {
@@ -112,10 +115,6 @@ const {
                 id: product.category.id,
                 name: product.category.name,
               },
-/*               user: {
-                id: rating.user.id,
-                username: rating.user.username
-              } */
             };
             if (product.ratings) {
               cleanProduct.ratings = [];
@@ -125,8 +124,8 @@ const {
                   {
                     score: rating.score,
                     review: rating.review,
-                    user: rating.user.id,
-                    createdAt: rating.scoreedAt
+                    user: rating.user.username,
+                    createdAt: rating.createdAt,
                   },
                   ...cleanProduct.ratings
                 ]);
@@ -137,7 +136,7 @@ const {
           
         }
 
-            async function getById(id) {
+  async function getById(id) {
     try {
       const product = await db.product.findOne({
         where: { id },
