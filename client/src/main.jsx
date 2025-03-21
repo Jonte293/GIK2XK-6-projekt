@@ -24,7 +24,11 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: '/products/edit',
+        path: '/products/:id/edit',
+        element: <ProductEdit />
+      },
+      {
+        path: '/products/new',
         element: <ProductEdit />
       },
       {
@@ -32,16 +36,24 @@ const router = createBrowserRouter([
         element: <Products />
       },
       {
-        path: '/products/1',
+        path: '/products/:id',
         element: <ProductDetail />
       },
       {
-        path: '/Cart/',
+        path: '/cart/',
+        element: <Cart />
+      },
+      {
+        path: '/users/:id/carts/',
         element: <Cart />
       },
       {
         path: '/products/add',
         element: <ProductAdd />
+      },
+      {
+        path: '/categories/:category/products',
+        element: <Products />
       }  
     ]}
 ]);
