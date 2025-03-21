@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import CategoryItem from './CategoryItem';
+import Category from './Category';
 
 
 function ProductItemSmall({ product }) {
@@ -12,7 +12,7 @@ function ProductItemSmall({ product }) {
         <p>Kategori: {product.category.name}</p>
         <img width="300" src={product.imageUrl} /> 
               {product.category.length > 0 &&
-                product.category.map((category) => <CategoryItem key={category} text={category} />)}
+                product.category.map((category) => <Category key={category} text={category} />)}
               <p>{product.body}</p>
  
     </>

@@ -1,4 +1,4 @@
-import CategoryItem from './CategoryItem';
+import Category from './Category';
 
 function CategoryList() {
     const categories = [
@@ -32,7 +32,7 @@ function CategoryList() {
           {categories?.length > 0 ? (
             categories.map((category) => (
               <li key={`products_${category.id}`}>
-                <CategoryItem text={category.name} />
+                <Category text={category.name} />
               </li>
             ))
           ) : (

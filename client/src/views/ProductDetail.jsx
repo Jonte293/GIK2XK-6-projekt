@@ -5,14 +5,16 @@ import ReviewForm from "../components/ReviewForm";
 import Rating from "../components/Rating";
 
 function ProductDetail() {
-    const product = {
-        "id": 1,
-        "name": "noccoXTREME",
-        "price": "18.90",
+    const product = 
+    {
+        "id": 4,
+        "name": 'Nocco Ramonade',
+        "price": '20.00',
         "description": null,
-        "imageUrl": null,
-        "createdAt": "2025-03-19T13:37:11.000Z",
-        "updatedAt": "2025-03-19T13:37:11.000Z",
+        "imageUrl":
+          'https://www.sportkost.se/pub_images/original/nocco_focus_ramonade_330ml.jpg',
+        "createdAt": '2025-03-20T13:40:57.000Z',
+        "updatedAt": '2025-03-20T13:45:06.000Z',
         "category": {
             "id": 3,
             "name": "Energi dryck"
@@ -25,8 +27,8 @@ function ProductDetail() {
                 "createdAt": "2025-03-21T12:01:23.000Z"
             },
             {
-                "score": 5,
-                "review": "Bästa flingerna!!!",
+                "score": 4,
+                "review": "Sämsta flingerna!!!",
                 "user": "Pierre",
                 "createdAt": "2025-03-21T11:57:57.000Z"
             }
@@ -34,17 +36,17 @@ function ProductDetail() {
     };
 
     const navigate = useNavigate();
-    return( 
+    return ( 
     <div>
         <ProductItemLarge product={product}/>
         <Button onClick={() => navigate(-1)}>Tillbaka</Button>
-        <Button onClick={() => navigate(`/products${product.id}/edit`)}></Button>
+        <Button onClick={() => navigate(`/products${product.id}/edit`)}>Edit</Button>
         <Button>Lägg i varukorg</Button>
         <ReviewForm />
         {product.ratings && 
-            product.ratings.map((rating, i) => ( <Rating key={`rating_${i}`}
-        rating={rating} />
-        ))} 
+            product.ratings.map((rating, i) => 
+        ( <Rating key={`rating_${i}`} rating={rating} />
+))}
     </div>
     )
 }
