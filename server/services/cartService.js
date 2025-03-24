@@ -87,7 +87,7 @@ async function getAll() {
     if (products) {
       products.forEach(async (product) => {
         const productId = await _findOrCreateProductId(product);
-        await post.addProduct(productId);
+        await cart.addProduct(productId);
       });
     }
   }

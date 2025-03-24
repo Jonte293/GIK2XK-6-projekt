@@ -1,14 +1,14 @@
 const router = require('express').Router();
 const cartService = require('../services/cartService');
 
-router.post('/:id/addProduct', (req, res) => {
+/* router.post('/:id/addProduct', (req, res) => {
     const product = req.body;
     const id = req.params.id;
   
-    cartService.addProduct(id, product).then((result) => {
+    cartService.create(id, product).then((result) => {
       res.status(result.status).json(result.data);
     });
-  });
+  }); */
   
   router.get('/:id', (req, res) => {
     const id = req.params.id;
