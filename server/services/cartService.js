@@ -81,7 +81,7 @@ async function getAll() {
 
   
   
-  async function _addProductToCart(cart, products) {
+/*   async function _addProductToCart(cart, products) {
     await db.cartRow.destroy({ where: { cartId: cart.id } });
   
     if (products) {
@@ -90,10 +90,48 @@ async function getAll() {
         await cart.addProduct(productId);
       });
     }
-  }
+  } */
+
+    //Chatgpt lösning!!!
+
+    async function _addProductToCart(cart, products) {
+      await db.cartRow.destroy({ where: { cartId: cart.id } });
+    
+      if (products && products.length > 0) {
+        for (const item of products) {
+          const name = typeof item === "string" ? item : item.name;
+          const quantity = typeof item === "string" ? 1 : item.quantity || 1;
+    
+          const productId = await _findOrCreateProductId(name);
+    
+          await db.cartRow.create({
+            cartId: cart.id,
+            productId: productId,
+            quantity: quantity
+          });
+        }
+      }
+    }
+
+/*     async function _addProductToCart(cart, products) {
+      if (products) {
+        // First, clear existing cart rows to prevent duplicates
+        await db.cartRow.destroy({ where: { cartId: cart.id } });
+    
+        // Loop through products and add them with quantity
+        for (const product of products) {
+          const productId = await _findOrCreateProductId(product);
+          const quantity = product.quantity || 1; // Default to 1 if no quantity is provided
+    
+          // Assuming cart.addProduct supports an association table
+          await cart.addProduct(productId, { through: { quantity } });
+        }
+      }
+    } */
 
   async function _findOrCreateProductId(name) {
     name = name.toLowerCase().trim();
+    
     const foundOrCreatedProduct = await db.product.findOrCreate({ where: { name } });
   
     return foundOrCreatedProduct[0].id;
@@ -114,11 +152,13 @@ async function getAll() {
           },
           products: []
         };
-      
+      // Hjälp av chatgpt
         if (cart.products) {
-          cart.products.map((product) => {
-            return (cleanCart.products = [product.name, ...cleanCart.products]);
-          });
+          cleanCart.products = cart.products.map(product => ({
+            name: product.name,
+            imageUrl: product.imageUrl,
+            quantity: product.cartRow?.quantity || 0
+          }));
           return cleanCart;
         }
       }
