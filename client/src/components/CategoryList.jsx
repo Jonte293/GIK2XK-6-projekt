@@ -1,4 +1,35 @@
 import Category from './Category';
+import { useEffect, useState } from 'react';
+import { getAll } from '../services/CategoryService';
+
+function CategoryList() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getAll().then((categories) => setCategories(categories));
+  }, []);
+    return (
+        <ul>
+          {categories?.length > 0 ? (
+            categories.map((category) => (
+              <li key={`products_${category.id}`}>
+                <Category id={category.id} text={category.name} />
+              </li>
+            ))
+          ) : (
+            <h3>Kunde inte hämta produkt</h3>
+          )}
+        </ul>
+      );
+      
+    }
+
+
+export default CategoryList;
+
+
+
+/* import Category from './Category';
 
 function CategoryList() {
     const categories = [
@@ -44,4 +75,4 @@ function CategoryList() {
     }
 
 
-export default CategoryList;
+export default CategoryList; */
