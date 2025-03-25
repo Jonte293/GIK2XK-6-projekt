@@ -40,9 +40,9 @@ export async function create(cart) {
     }
 }
 
-export async function update(product) {
+export async function update(cart) {
     try{
-        const response = await axios.put('/carts', product);
+        const response = await axios.put('/carts', cart);
         if(response.status === 200) return response.data;
         else {
             console.log(response.data);
