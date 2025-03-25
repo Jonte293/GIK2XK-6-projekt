@@ -21,6 +21,7 @@ return product ? (
 <div>
 <ProductItemLarge product={product}/>
 <Button onClick={() => navigate(-1)}>Tillbaka</Button>
+<Button onClick={() => navigate(`/products/${product.id}/edit`)}>Redigera Produkt</Button>
 </div>
 ) : (
   <h3>Kunde inte hitta Produkt</h3>
