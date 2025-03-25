@@ -8,7 +8,8 @@ function App() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to="/">Webshop X-treme</Link>
+            <Link to="/"> Webshop X-treme </Link>
+            <Link to="/products"> Produkter </Link>
           </Typography>
           <Button color="inherit">
           <Link to="carts/16"><ShoppingCartOutlinedIcon/></Link>

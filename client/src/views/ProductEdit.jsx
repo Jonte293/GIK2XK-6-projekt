@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getOne } from '../services/ProductService';
+import { useEffect, useMemo, useState } from 'react';
+import { getOne, create, update, remove } from '../services/ProductService';
 import { getAll } from '../services/CategoryService';
 import {
   Button,
@@ -14,7 +14,11 @@ import {
 function ProductEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const emptyProduct = { name: '', price: '', description: '', imageUrl: '' };
+  // useMemo för att få bort en varning om reactHooks
+  const emptyProduct = useMemo(
+    () => ({ id: 0, name: '', price: '', description: '', imageUrl: '', category: null }),
+    []
+  );
   const [product, setProduct] = useState(emptyProduct);
   const [categories, setCategory] = useState([]);
 
@@ -24,7 +28,7 @@ function ProductEdit() {
     } else {
       setProduct(emptyProduct);
     }
-  }, [id]);
+  }, [emptyProduct, id]);
 
   useEffect(() => {
     getAll().then((category) => {
@@ -33,12 +37,38 @@ function ProductEdit() {
     });
   }, []);
 
-  console.log(product);
+  function onChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    const newProduct = { ...product, [name]: value };
+    setProduct(newProduct);
+  }
+
+  function onSave() {
+    if (product.id === 0) {
+      create(product).then((response) => {
+        navigate('/', { replace: true, state: response });
+      });
+    } else {
+      update(product).then((response) =>
+        navigate(`/products/${product.id}`, { replace: true, state: response })
+      );
+    }
+  }
+
+
+  function onDelete() {
+    remove(product.id).then((response) =>
+      navigate('/', { replace: true, state: response })
+    );
+  }
 
   return (
     <form>
       <div>
         <TextField
+          onChange={onChange}
           value={product.name}
           name='name'
           id='name'
@@ -47,6 +77,7 @@ function ProductEdit() {
       </div>
       <div>
         <TextField
+          onChange={onChange}
           value={product.price}
           name='price'
           id='price'
@@ -55,6 +86,7 @@ function ProductEdit() {
       </div>
       <div>
         <TextField
+          onChange={onChange}
           value={product.description}
           multiline
           minRows={5}
@@ -65,6 +97,7 @@ function ProductEdit() {
       </div>
       <div>
         <TextField
+          onChange={onChange}
           value={product.imageUrl}
           name='imageUrl'
           id='imageUrl'
@@ -83,17 +116,10 @@ function ProductEdit() {
           </InputLabel>
           <NativeSelect
             // Denna bit av koden användes chatgpt:
-            /*  Promt till chatgpt:   this chip worked earlier.
-
-      {product?.category && (
-  <Chip key={product.category.id} label={product.category.name} />
-
-Can i do something very similar with the nativeselect? */
-            value={product?.category?.id || ''}
-            onChange={(e) => {
-              const category = categories.find((c) => c.id === +e.target.value);
-              setProduct({ ...product, category });
-            }}
+            value={product.categoryId || ''}
+            onChange={(e) =>
+              setProduct({ ...product, categoryId: +e.target.value })
+            }
             inputProps={{
               name: 'age',
               id: 'uncontrolled-native',
@@ -111,12 +137,12 @@ Can i do something very similar with the nativeselect? */
         Tillbaka
       </Button>
       {id && (
-        <Button variant='contained' color='error'>
+        <Button onClick={onDelete} variant='contained' color='error'>
           {' '}
           Ta bort produkt{' '}
         </Button>
       )}
-      <Button variant='contained' color='success'>
+      <Button onClick={onSave} variant='contained' color='success'>
         Spara
       </Button>
     </form>

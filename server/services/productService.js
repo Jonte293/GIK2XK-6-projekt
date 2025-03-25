@@ -6,7 +6,7 @@ const {
 } = require('../helpers/responseHelper');
 
 
-  async function create(product) {
+/*   async function create(product) {
     try {
       const newProduct = await db.product.create(product);
       await _addCategoryToProduct(newProduct, product.category);
@@ -15,7 +15,30 @@ const {
     } catch (error) {
       return createResponseError(error.status, error.message);
     }
-  }
+  } */
+    async function create(product) {
+      try {
+        // Extract categoryId from the full category object (if needed)
+        const categoryId = product.category?.id || product.categoryId;
+    
+        if (!categoryId) {
+          throw new Error("Missing categoryId");
+        }
+    
+        // Inject categoryId directly into the product object before create
+        const newProduct = await db.product.create({
+          ...product,
+          categoryId,
+        });
+    
+        // If you're using belongsTo, this step isn't strictly needed — but you can keep it for consistency
+        // await _addCategoryToProduct(newProduct, categoryId);
+    
+        return createResponseSuccess(newProduct);
+      } catch (error) {
+        return createResponseError(error.status || 500, error.message);
+      }
+    }
 
     async function update(product, id) {
       if (!id) {
@@ -84,14 +107,34 @@ const {
     }
   }  
 
-  
-    async function _findOrCreateCategoryId(name) {
+/*   async function _addCategoryToProduct(category) {
+    if (category) {
+      const categoryId = await _findOrCreateCategoryId(category);
+      await post.addCategory(categoryId);
+    }
+  }
+ 
+     async function _findOrCreateCategoryId(name) {
       name = name.toLowerCase().trim();
       const foundOrCreatedCategory = await db.Category.findOrCreate({ where: { name } });
     
       return foundOrCreatedCategory[0].id;
     }
 
+    async function _addCategoryToProduct(product, categoryId) {
+      if (!categoryId) {
+        throw new Error("Missing categoryId");
+      }
+    
+      // Optional: check if category exists (good practice)
+      const category = await db.Category.findByPk(categoryId);
+      if (!category) {
+        throw new Error(`Category with ID ${categoryId} does not exist`);
+      }
+    
+      // Link the product to the category
+      await product.setCategory(category); // use `setCategory` for belongsTo
+    }
 
           async function _addCategoryToProduct(categories) {
             if (categories) {
@@ -100,7 +143,8 @@ const {
                 await post.addCategory(categoryId);
               });
             }
-          }
+          } */
+
   
           function _formatProduct(product) {
             const cleanProduct = {
