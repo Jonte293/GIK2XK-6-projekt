@@ -7,7 +7,8 @@ function ProductItemLarge({ product }) {
       <h3>{product.name}</h3>
       <h3>{product.price}</h3>
       {product.category && (
-        <Category key={`category_${product.category.id}`} text={product.category.name} /> )}
+        <Category key={`category_${product.category.id}`} id={product.category.id} text={product.category.name} /> )}
+              <p>{product.body}</p>
         <div>
           <img src={product.imageUrl} height="200" />
         </div>

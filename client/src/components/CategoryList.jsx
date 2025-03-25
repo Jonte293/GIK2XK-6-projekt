@@ -32,7 +32,7 @@ function CategoryList() {
           {categories?.length > 0 ? (
             categories.map((category) => (
               <li key={`products_${category.id}`}>
-                <Category text={category.name} />
+                <Category id={category.id} text={category.name} />
               </li>
             ))
           ) : (
@@ -40,6 +40,7 @@ function CategoryList() {
           )}
         </ul>
       );
+      
     }
 
 

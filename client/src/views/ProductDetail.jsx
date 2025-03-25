@@ -1,4 +1,34 @@
 import ProductItemLarge from "../components/ProductItemLarge";
+import { useEffect, useState } from "react";
+import { getOne } from '../services/ProductService';
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+
+function ProductDetail() {
+  const { id } = useParams();
+  console.log(id)
+  const [product, setProduct] = useState(null);
+
+  console.log("Product ID from useParams:", id);
+
+  useEffect(() => {
+    getOne(id).then((product) => setProduct(product));
+  }, [id]);
+  
+  const navigate = useNavigate();
+
+return product ? (
+<div>
+<ProductItemLarge product={product}/>
+<Button onClick={() => navigate(-1)}>Tillbaka</Button>
+</div>
+) : (
+  <h3>Kunde inte hitta Produkt</h3>
+);
+}
+export default ProductDetail;
+
+/* import ProductItemLarge from "../components/ProductItemLarge";
 import { Button} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ReviewForm from "../components/ReviewForm";
@@ -53,3 +83,4 @@ function ProductDetail() {
 
 
 export default ProductDetail;
+ */
