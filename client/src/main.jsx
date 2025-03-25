@@ -5,7 +5,8 @@ import App from './App.jsx'
 import ProductEdit from './views/ProductEdit.jsx';
 import Products from './views/Products.jsx';
 import ProductDetail from './views/ProductDetail.jsx';
-import Cart from './views/Cart.jsx';
+import Carts from './views/Carts.jsx';
+import CartDetail from './views/CartDetail.jsx';
 import ProductAdd from './views/ProductAdd.jsx';
 import Home from './views/Home.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -40,12 +41,12 @@ const router = createBrowserRouter([
         element: <ProductDetail />
       },
       {
-        path: '/cart/',
-        element: <Cart />
+        path: '/carts/',
+        element: <Carts />
       },
       {
-        path: '/users/:id/carts/',
-        element: <Cart />
+        path: '/carts/:id',
+        element: <CartDetail />
       },
       {
         path: '/products/add',

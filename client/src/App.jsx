@@ -11,7 +11,7 @@ function App() {
             <Link to="/">Webshop X-treme</Link>
           </Typography>
           <Button color="inherit">
-          <Link to="/users/:id/carts/"><ShoppingCartOutlinedIcon/></Link>
+          <Link to="carts/16"><ShoppingCartOutlinedIcon/></Link>
           
           </Button>
         </Toolbar>

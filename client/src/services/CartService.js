@@ -1,6 +1,6 @@
 import axios from './api';
 
-export async function getAll(endpoint = '/carts') {
+export async function getAll(endpoint = '/cart') {
     try {
         const response = await axios.get(endpoint);
 
@@ -15,6 +15,10 @@ export async function getAll(endpoint = '/carts') {
 }
 
 export async function getOne(id) {
+    console.log("Fetching cart with ID:", id); // Debugging
+    if (!id) {
+        console.error("Cart ID is missing!");
+        return null;}
     try{
         const response = await axios.get(`/carts/${id}`);
         if(response.status === 200) return response.data;

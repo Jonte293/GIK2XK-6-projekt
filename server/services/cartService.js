@@ -166,6 +166,7 @@ async function getAll() {
         if (cart.products) {
           cleanCart.products = cart.products.map(product => ({
             name: product.name,
+            price: product.price,
             imageUrl: product.imageUrl,
             quantity: product.cartRow?.quantity || 0
           }));
