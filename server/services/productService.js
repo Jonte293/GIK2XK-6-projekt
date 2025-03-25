@@ -196,7 +196,7 @@ const {
           return createResponseError(422, 'Id är obligatoriskt');
         }
         try {
-          rating.postId = id;
+          rating.productId = id;
           const newRating = await db.rating.create(rating);
           return createResponseSuccess(newRating);
         } catch (error) {
