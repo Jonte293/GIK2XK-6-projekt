@@ -1,5 +1,6 @@
 import { Link, Outlet} from "react-router-dom";
 import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 function App() {
   return (
     <>
@@ -10,7 +11,8 @@ function App() {
             <Link to="/">Webshop X-treme</Link>
           </Typography>
           <Button color="inherit">
-          <Link to="/products/add">Lägg till produkt</Link>
+          <Link to="/users/:id/carts/"><ShoppingCartOutlinedIcon/></Link>
+          
           </Button>
         </Toolbar>
       </AppBar>

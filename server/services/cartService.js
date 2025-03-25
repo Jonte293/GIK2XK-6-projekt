@@ -68,8 +68,18 @@ async function getAll() {
   async function destroy(id) {
     if (!id) {
       return createResponseError(422, 'Id är obligatoriskt');
-    }
+    } 
+/*     try {
+      await db.cartRow.destroy({
+        where: { cartId, cart.id }
+      });
+    } catch (error) {
+      return createResponseError(error.status, error.message);
+    } */
     try {
+      await db.cartRow.destroy ({
+        where: {cartId:id}
+      })
       await db.cart.destroy({
         where: { id }
       });
