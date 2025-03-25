@@ -10,7 +10,7 @@ function ProductList({ pathname }) {
           setProducts(products);
       });
   }, [pathname]);
-  getAll().then((products) => console.log(products));
+ /*  getAll().then((products) => console.log(products)); */
   return (
     <ul>
       {products?.length > 0 ? (

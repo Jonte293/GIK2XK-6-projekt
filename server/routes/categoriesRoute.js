@@ -10,7 +10,7 @@ const productService = require('../services/productService');
 });
  */
 
-router.get('/:categoryName', 
+/* router.get('/:categoryName', 
   async (req, res) => {
     try{
         const categoryName = req.params.categoryName;
@@ -19,7 +19,28 @@ router.get('/:categoryName',
       } catch (error) {
         res.status(500).json({ error: 'Något gick fel vid hämtning av produkter per kategori.'});
       }
+}); */
+
+/* router.get('/:id/categories', 
+  async (req, res) => {
+    try{
+        const id = req.params.id;
+        const result = await productService.getByCategory(categoryName);
+        res.status(result.status).json(result.data);
+      } catch (error) {
+        res.status(500).json({ error: 'Något gick fel vid hämtning av produkter per kategori.'});
+      }
 });
+ */
+router.get('/:id/products', (req, res) => {
+  const id = req.params.id;
+
+  productService.getByCategory(id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+});
+
+
 
 
 router.get('/', (req, res) => {

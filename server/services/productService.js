@@ -155,18 +155,18 @@ const {
     }
   }  
 
-/*         async function getByCategory(categoryId) {
+        async function getByCategory(categoryId) {
           try {
             const category = await db.category.findOne({ where: { id: categoryId } });
-            const allProducts = await category.getProducts({ include: [db.product, db.category] });
+            const allProducts = await category.getProducts({ include: [db.category, db.rating] });
             // Om allt blev bra, returnera allProducts 
             return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
           } catch (error) {
             return createResponseError(error.status, error.message);
           }
-        } */
-
-          async function getByCategory(categoryName) {
+        }
+//TEST
+/*           async function getByCategory(categoryName) {
             try {
   
               const category = await db.category.findOne({
@@ -189,8 +189,10 @@ const {
             } catch (error) {
               return createResponseError(error.status, error.message);
             }
-          }
+          } */
 
+
+            
       async function addRating(id, rating) {
         if (!id) {
           return createResponseError(422, 'Id är obligatoriskt');
