@@ -46,29 +46,85 @@ async function getAll() {
   }
 
   async function update(cart, id) {
+
+
     if (!id) {
       return createResponseError(422, 'Id är obligatoriskt');
     }
     try {
-      const existingCart = await db.cart.findOne({ where: { id } });
+      const existingCart = await db.cart.findOne({ 
+        where: { id },
+         include: [{model: db.product, through: { attributes: ['quantity']}}] });
+
       if (!existingCart) {
         return createResponseError(404, 'Hittade ingen kundvagn att uppdatera.');
       }
-      await _addProductToCart(existingCart, cart.products);
-      await db.cart.update(cart, {
-        where: { id }
+
+      if (cart.products && cart.products.length > 0) {
+        for (const item of cart.products) {
+          const productId = await _findOrCreateProductId(item.name);
+
+          if (item.quantity === 0) {
+            // Ta bort cartRow om produkten inte längre ska vara i kundvagnen
+            await db.cartRow.destroy({
+                where: { cartId: existingCart.id, productId: productId }
+            });
+        } else {
+            const quantity = item.quantity || 1;
+
+          const [cartRow, created] = await db.cartRow.findOrCreate({
+            where: { cartId: existingCart.id, productId: productId },
+            defaults: { quantity: quantity }
+          });
+          
+          if (!created) {
+            // Produkten finns redan i kundvagnen → uppdatera kvantiteten istället
+            await cartRow.update({ quantity: quantity });
+          }
+          }
+        }
+      }
+      const updatedCart = await db.cart.findOne({
+        where: { id },
+        include: [{ model: db.product, through: { attributes: ['quantity'] } }]
       });
-      return createResponseMessage(200, 'Kundvagnen uppdaterades.');
+
+      return createResponseMessage(200, updatedCart);
     } catch (error) {
-      return createResponseError(error.status, error.message);
+      console.error("Update error:", error);
+      return createResponseError(500, 'Något gick fel vid uppdatering av kundvagnen.');
     }
   }
 
 
-  async function destroy(id) {
+  async function removeProductFromCart(req, res) {
+    const { cartId, productId } = req.body; // Hämtar cartId och productId från request body
+
+    if (!cartId || !productId) {
+        return res.status(400).send({ message: 'Cart ID och Product ID är obligatoriska.' });
+    }
+
+    try {
+        // Försök att ta bort rätt rad i cartRow
+        const rowsDeleted = await db.cartRow.destroy({
+            where: { cartId, productId }
+        });
+
+        if (rowsDeleted > 0) {
+            res.status(200).send({ message: 'Produkt borttagen från kundvagnen.' });
+        } else {
+            res.status(404).send({ message: 'Produkt eller kundvagn inte hittad.' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Något gick fel vid borttagning av produkten.' });
+    }
+}
+
+  /* async function destroy(id) {
     if (!id) {
       return createResponseError(422, 'Id är obligatoriskt');
-    } 
+    }  */
 /*     try {
       await db.cartRow.destroy({
         where: { cartId, cart.id }
@@ -76,7 +132,7 @@ async function getAll() {
     } catch (error) {
       return createResponseError(error.status, error.message);
     } */
-    try {
+    /* try {
       await db.cartRow.destroy ({
         where: {cartId:id}
       })
@@ -87,7 +143,7 @@ async function getAll() {
     } catch (error) {
       return createResponseError(error.status, error.message);
     }
-  }
+  } */
 
   
   
@@ -105,7 +161,6 @@ async function getAll() {
     //Chatgpt lösning!!!
 
     async function _addProductToCart(cart, products) {
-      await db.cartRow.destroy({ where: { cartId: cart.id } });
     
       if (products && products.length > 0) {
         for (const item of products) {
@@ -179,7 +234,7 @@ async function getAll() {
         getById,
         create,
         update,
-        destroy
+        removeProductFromCart
       };
       
   
