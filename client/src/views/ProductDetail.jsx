@@ -3,11 +3,15 @@ import HoverRating from '../components/HoverRating';
 import { useEffect, useState } from 'react';
 import { getOne, addRating, removeRating } from '../services/ProductService';
 import { useNavigate, useParams } from 'react-router-dom';
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import EditIcon from "@mui/icons-material/Edit";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import {
   Box,
   Button,
   Card,
   CardContent,
+  Container,
   Paper,
   Rating,
   TextField,
@@ -67,29 +71,32 @@ function ProductDetail() {
  */
 
   const navigate = useNavigate();
-
   return product ? (
-    <div>
+    <Container>
       <ProductItemLarge product={product} />
-
-      <Button variant='contained' color='error' onClick={() => navigate(-1)}>
+      <Box display="flex"  mt={1}>
+      <Button variant='contained' startIcon={<ChevronLeftIcon />} sx={{mr: 2}} onClick={() => navigate(-1)}>
         Tillbaka
       </Button>
+
+
       <Button
+        startIcon={<EditNoteIcon />}
         variant='contained'
-        color='error'
-        onClick={() => navigate(`/products/${product.id}/edit`)}
-      >
-        Redigera Produkt
-      </Button>
-      <Button
-        variant='outlined'
-        color='primary'
         onClick={() => setShowReviewForm((prev) => !prev)}
       >
         {showReviewForm ? 'Stäng Recension' : 'Skriv Recension'}
       </Button>
-
+      <Button
+        sx={{ ml: 'auto' }}
+        variant='contained'
+        color='error'
+        startIcon={<EditIcon />}
+        onClick={() => navigate(`/products/${product.id}/edit`)}
+      >
+        Redigera Produkt
+      </Button>
+      </Box>
       <div>
         {showReviewForm && (
           <Box sx={{ mt: 2, mb: 2 }}>
@@ -147,7 +154,7 @@ function ProductDetail() {
           ))}
         </li>
       </ul>
-    </div>
+    </Container>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>
   );

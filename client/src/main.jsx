@@ -8,11 +8,9 @@ import ProductDetail from './views/ProductDetail.jsx';
 import CartDetail from './views/CartDetail.jsx';
 import ProductAdd from './views/ProductAdd.jsx';
 import Home from './views/Home.jsx';
+import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-/* const router = createBrowserRouter([
-  { path: '/', element: <App></App> }
-]); */
+import { CssBaseline } from '@mui/material';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +54,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <CssBaseline />
     <RouterProvider router={router}/>
   </StrictMode>,
 );

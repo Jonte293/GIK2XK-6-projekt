@@ -1,11 +1,18 @@
-import Category from "./Category";
+import Category from './Category';
 import { getOne } from '../services/ProductService';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Rating } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Paper,
+  Rating,
+  Typography,
+} from '@mui/material';
 
 function ProductItemLarge() {
-
   const { id } = useParams();
   console.log(id);
   const [product, setProduct] = useState(null);
@@ -14,29 +21,53 @@ function ProductItemLarge() {
     getOne(id).then((product) => setProduct(product));
   }, [id]);
 
-// ChatGpt lösning, frågade om att räkna ut genomsnittligt betyg
-  const scores = product?.ratings?.map(rating => rating.score).filter(score => score !== null) || [];
-  const averageRating = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+  // ChatGpt lösning, frågade om att räkna ut genomsnittligt betyg
+  const scores =
+    product?.ratings
+      ?.map((rating) => rating.score)
+      .filter((score) => score !== null) || [];
+  const averageRating = scores.length
+    ? scores.reduce((a, b) => a + b, 0) / scores.length
+    : 0;
 
   return product ? (
+    <Paper sx={{ my: 4, p: 4, borderRadius: 2 }} elevation={3}>
+      <Box>
+        <Typography
+          sx={{
+            fontWeight: 'bold',
+          }}
+        >
+          {product.name}
+        </Typography>
+        <Typography>{product.price}</Typography>
 
-    
-    <div style={{ border: '1px solid black' }}>
-      <h3>{product.name}</h3>
-      <h3>{product.price}</h3>
-      <p>Produkbeskrivning {product.description}</p>
-      {product.category && (
-        <Category key={`category_${product.category.id}`} id={product.category.id} text={product.category.name} /> )}
-              <p>{product.body}</p>
-              <Rating value={averageRating} precision={0.5} readOnly />
-        <div>
-          <img src={product.imageUrl} height="200" />
-        
-        </div>
-    </div>
+        <Card elevation={0}>
+          <CardMedia
+            sx={{ width: 350, height: 350 }}
+            component='img'
+            image={product.imageUrl}
+          />
+          <CardContent>
+            <Typography sx={{ my: 2 }} variant='p'>
+              {product.description}
+            </Typography>
+            {product.category && (
+              <Category
+                key={`category_${product.category.id}`}
+                id={product.category.id}
+                text={product.category.name}
+              />
+            )}
+          </CardContent>
+        </Card>
+      </Box>
+      <Rating value={averageRating} precision={0.5} readOnly />
+    </Paper>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>
   );
 }
 
 export default ProductItemLarge;
+Box;

@@ -1,0 +1,17 @@
+a, 
+a:hover{
+    text-decoration: none;
+    color:inheritM
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+.appBar {
+    color: rgb(248, 94, 94);
+}
