@@ -1,7 +1,7 @@
 import ProductItemLarge from '../components/ProductItemLarge';
 import HoverRating from '../components/HoverRating';
 import { useEffect, useState } from 'react';
-import { getOne, addRating } from '../services/ProductService';
+import { getOne, addRating, removeRating } from '../services/ProductService';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
@@ -44,8 +44,19 @@ function ProductDetail() {
 
     addRating(product.id, rating).then((response) => {
       console.log('Recension sparad:', response);
-      setRating({ review: '', score: 0 });
+      setRating({ review: '', score: 0 }),
+      window.location.reload()
     });
+  }
+  function onDelete(id) {
+    if (!id) {
+      console.error('Rating ID is undefined');
+      return;
+    }
+    removeRating(id).then((response) =>
+      navigate( { replace: true, state: response }),
+      window.location.reload()
+    );
   }
 
   /*   useEffect(() => {
@@ -95,7 +106,7 @@ function ProductDetail() {
               Publicera Rescension
             </Button>
 
-          {/* Fick hjälp av chatgpt med att ta värdet från HoverRating och lägga in i rating.score */}
+            {/* Fick hjälp av chatgpt med att ta värdet från HoverRating och lägga in i rating.score */}
             <HoverRating
               value={Number(rating.score)}
               onChange={(e, newValue) => {
@@ -113,6 +124,7 @@ function ProductDetail() {
         <li>
           {product.ratings.map((rating) => (
             <Card key={rating.id} sx={{ mb: 2, mr: 6, p: 1 }}>
+              
               <CardContent sx={{ padding: '8px' }}>
                 <div>
                   <strong>Recension av:</strong> {rating.user}
@@ -128,15 +140,10 @@ function ProductDetail() {
 
                 <div>{rating.review}</div>
               </CardContent>
+              <Button onClick={() => onDelete(rating.id)} >
+                Ta bort Recension
+              </Button>
             </Card>
-
-            /*             <TextField
-              label={`Rescension av: ${rating.review}`}
-              multiline
-              minRows={5}
-              name='name'
-              id='name'
-            /> */
           ))}
         </li>
       </ul>

@@ -10,18 +10,10 @@ function ProductItemLarge() {
   console.log(id);
   const [product, setProduct] = useState(null);
 
-/*   console.log('Product ID from useParams:', id); */
-
   useEffect(() => {
     getOne(id).then((product) => setProduct(product));
   }, [id]);
 
- /*  if (!product || !product.ratings) {
-    return <div>Loading...</div>; // or a spinner, etc.
-  }
-  const scores = product.ratings.map(r => r.score).filter(score => score !== null); */
-
-  //
 // ChatGpt lösning, frågade om att räkna ut genomsnittligt betyg
   const scores = product?.ratings?.map(rating => rating.score).filter(score => score !== null) || [];
   const averageRating = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;

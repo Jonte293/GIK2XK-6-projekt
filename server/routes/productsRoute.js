@@ -11,6 +11,15 @@ router.post('/:id/addRating', (req, res) => {
   });
 });
 
+/* router.post('/:id/removeRating', (req, res) => {
+  const rating = req.body;
+  const id = req.params.id;
+
+  productService.removeRating(id, rating).then((result) => {
+    res.status(result.status).json(result.data);
+  });
+}); */
+
 router.get('/:id/', (req, res) => {
   const id = req.params.id;
 

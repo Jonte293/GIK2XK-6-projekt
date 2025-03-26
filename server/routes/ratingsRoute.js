@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const db = require('../models')
+const productService = require('../services/productService');
 
 /* router.get('/:id', (req, res) => {
   const id = req.params.id;
@@ -31,14 +32,11 @@ router.post('/', (req, res) => {
   });
 }); */
 
-router.delete('/', (req, res) => {
-  db.rating
-    .destroy({
-      where: { id: req.body.id }
-    })
-    .then(() => {
-      res.json(`Recensionen raderades`);
-    });
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  productService.removeRating(id).then((result) => {
+    res.status(result.status).json(result.data);
+  });
 });
 
 
