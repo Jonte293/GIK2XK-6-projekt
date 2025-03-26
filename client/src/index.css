@@ -1,7 +1,7 @@
 a, 
 a:hover{
     text-decoration: none;
-    color:inheritM
+    color:inherit
 }
 
 ul {
@@ -13,5 +13,25 @@ li {
 }
 
 .appBar {
-    color: rgb(248, 94, 94);
+
+background: #E7473C;
+
 }
+
+html, body, #root {
+    height: 100%;
+    background-color: #e4e4e4;
+    margin: 0;
+  }
+
+/* .product-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+    background: red;
+  }
+
+.product-cardItem {
+    grid-column: span 3;
+}   */

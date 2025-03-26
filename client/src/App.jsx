@@ -7,7 +7,7 @@ function App() {
   return (
     <>
      <Box sx={{ flexGrow: 1 }}>
-      <MenuAppBar position="static" sx={ {backgroundColor: "grey"}}>
+      <MenuAppBar className='appbar' position="static" sx={ {backgroundColor: "grey"}}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/"> Webshop X-treme </Link>

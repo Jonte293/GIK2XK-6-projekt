@@ -10,6 +10,7 @@ import {
   Typography,
   Rating,
   CardMedia,
+  Grid2,
 } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -26,13 +27,30 @@ function ProductItemSmall({ product }) {
   const navigate = useNavigate();
   return (
     <>
-      <Card variant='outlined' sx={{ mb: 4 }}>
+      <Card variant='outlined'     sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      height: '100%',
+      maxWidth: 500,
+      width: '100%',
+      border: '1px solid #ccc',
+      borderRadius: 2,
+      p: 2,
+      boxSizing: 'border-box',
+    }}
+  >
+    {<Link to={`/products/${product.id}`}> 
         <CardMedia
-          sx={{ width: 250, height: 250 }}
+        
+          sx={{ width: '100%', height: 200, minHeight: 250, objectFit: 'contain' }}
           component='img'
           image={product.imageUrl}
         />
-        <Rating value={averageRating} precision={0.5} readOnly />
+        </Link>}
+        <Box ml={1}>
+        <Rating  value={averageRating} precision={0.5} readOnly />
+        </Box>
         <CardHeader
           title={
             <Typography
@@ -47,7 +65,7 @@ function ProductItemSmall({ product }) {
           subheader={`Pris: ${product.price}`}
         />
         <CardContent>
-          <Box mb={2}>
+          <Box mb={1} mt={-3}>
             {/* <p>{}</p> */}
             {product.category && (
               <Category
@@ -69,6 +87,7 @@ function ProductItemSmall({ product }) {
         </CardActions>
       </Card>
     </>
+    
   );
 }
 

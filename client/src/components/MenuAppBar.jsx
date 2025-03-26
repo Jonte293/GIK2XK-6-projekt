@@ -14,6 +14,7 @@ import { getAll } from '../services/CategoryService'; // justera path om det beh
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
+import '../index.css';
 
 
 export default function MenuAppBar() {
@@ -38,9 +39,9 @@ export default function MenuAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{backgroundColor: 'grey'}}>
+      <AppBar class='appBar' position="static" sx={{}}>
         <Toolbar>
-        <Link to="/"><HomeIcon/></Link>
+        <Link to="/"><img src="https://i.imgur.com/R6bXFol.png" alt="Logo" style={{ height: '100px' }} /></Link>
           <IconButton
             size="large"
             edge="start"
@@ -82,10 +83,12 @@ export default function MenuAppBar() {
             </Link>
           </Typography> 
            <IconButton color="inherit">
-            <ShoppingCartOutlinedIcon />
+           <Link to="carts/1">
+            <ShoppingCartOutlinedIcon fontSize='large'/>
+            </Link>
           </IconButton>
           <Button color="inherit">
-          <Link to="carts/1"><ShoppingCartOutlinedIcon/>HEEEEJ</Link>
+          
           </Button>
 
         </Toolbar>
