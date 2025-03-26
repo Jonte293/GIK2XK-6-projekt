@@ -10,8 +10,8 @@ function App() {
       <MenuAppBar className='appbar' position="static" sx={ {backgroundColor: "grey"}}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link to="/"> Webshop X-treme </Link>
-            <Link to="/products"> Produkter </Link>
+{/*             <Link to="/"> Webshop X-treme </Link>
+            <Link to="/products"> Produkter </Link> */}
           </Typography>
           <Button color="inherit">
           <Link to="carts/1"><ShoppingCartOutlinedIcon/></Link>

@@ -1,6 +1,7 @@
 import Category from './Category';
 import { useEffect, useState } from 'react';
 import { getAll } from '../services/CategoryService';
+import { Box } from '@mui/material';
 
 function CategoryList() {
   const [categories, setCategories] = useState([]);
@@ -9,7 +10,7 @@ function CategoryList() {
     getAll().then((categories) => setCategories(categories));
   }, []);
     return (
-        <ul>
+      <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', listStyle: 'none', padding: 0, margin: 0 }}>
           {categories?.length > 0 ? (
             categories.map((category) => (
               <li key={`products_${category.id}`}>

@@ -2,6 +2,7 @@ a,
 a:hover{
     text-decoration: none;
     color:inherit
+    
 }
 
 ul {
@@ -23,6 +24,14 @@ html, body, #root {
     background-color: #e4e4e4;
     margin: 0;
   }
+
+
+  .MuiChip-root:hover {
+    transform: scale(1.04);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  } 
+
 
 /* .product-grid {
     display: grid;

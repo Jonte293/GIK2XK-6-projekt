@@ -50,7 +50,7 @@ export default function MenuAppBar() {
             sx={{ mr: 2 }}
             onClick={handleMenu}
           >
-            <MenuIcon/>
+            {/* <MenuIcon/> */}
           </IconButton>
        
           <Menu
@@ -61,30 +61,27 @@ export default function MenuAppBar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {categories.map((cat) => (
+            {categories.map((category) => (
               <MenuItem
-                key={cat.id}
+                key={category.id}
                 onClick={() => {
-                  navigate(`/categories/${cat.id}/products`);
+                  navigate(`/categories/${category.id}/products`);
                   handleClose();
                 }}
               >
-                {cat.name}
+                {category.name}
               </MenuItem>
             ))}
 
           </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Kategorier
-          </Typography> 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/products">
-            Produkter
+            <h2 style={{ fontWeight: 'bold', color: 'white' }}>Artiklar</h2>
             </Link>
           </Typography> 
            <IconButton color="inherit">
            <Link to="carts/1">
-            <ShoppingCartOutlinedIcon fontSize='large'/>
+            <ShoppingCartOutlinedIcon fontSize='large'sx={{ color: 'white' }}/>
             </Link>
           </IconButton>
           <Button color="inherit">

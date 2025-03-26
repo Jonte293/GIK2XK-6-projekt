@@ -1,7 +1,8 @@
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import ProductList from '../components/ProductList';
-import { Box, Button, Container } from '@mui/material';
-
+import { Box, Button, Chip, Container } from '@mui/material';
+import CategoryList from '../components/CategoryList';
+import Inventory2Icon from '@mui/icons-material/Inventory2';
 function Products() {
   const navigate = useNavigate();
 
@@ -10,9 +11,14 @@ function Products() {
 
   return (
     <Container>
-      <Box display='flex'>
+      <Box display='flex' alignItems="center" gap={2} mt={-2}>
+        <h2>Kategorier: </h2>
+        <Link to={`/products`}>
+      <Chip icon={<Inventory2Icon/>} label={'Alla Produkter'}></Chip>
+    </Link>
+      <CategoryList/>
         <Button
-          sx={{ ml: 'auto', mb: 1, mt: -3 }}
+          sx={{ ml: 'auto'}}
           variant='contained'
           color='success'
           onClick={() => navigate(`/products/new`)}
