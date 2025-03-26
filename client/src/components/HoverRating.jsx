@@ -3,7 +3,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 
-const labels = {
+/* const labels = {
   0.5: 'Useless',
   1: 'Useless+',
   1.5: 'Poor',
@@ -18,9 +18,30 @@ const labels = {
 
 function getLabelText(value) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
-}
+} */
 
-export default function HoverRating() {
+  export default function HoverRating({ value, onChange, readOnly = false }) {
+    const [ setHover] = React.useState(-1);
+  
+    return (
+      <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
+        <Rating
+          name="hover-feedback"
+          value={value}
+          precision={1}
+          onChange={onChange}
+          onChangeActive={(event, newHover) => {
+            setHover(newHover);
+          }}
+          readOnly={readOnly}
+          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+        />
+      </Box>
+    );
+  }
+
+
+/* export default function HoverRating() {
   const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
 
@@ -30,7 +51,6 @@ export default function HoverRating() {
         name="hover-feedback"
         value={value}
         precision={1}
-        getLabelText={getLabelText}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
@@ -40,8 +60,9 @@ export default function HoverRating() {
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
       {value !== null && (
-        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+        <Box sx={{ ml: 2 }}>{[hover !== -1 ? hover : value]}</Box>
       )}
     </Box>
   );
 }
+ */
