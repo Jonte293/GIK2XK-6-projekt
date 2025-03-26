@@ -5,7 +5,6 @@ import App from './App.jsx'
 import ProductEdit from './views/ProductEdit.jsx';
 import Products from './views/Products.jsx';
 import ProductDetail from './views/ProductDetail.jsx';
-import Carts from './views/Carts.jsx';
 import CartDetail from './views/CartDetail.jsx';
 import ProductAdd from './views/ProductAdd.jsx';
 import Home from './views/Home.jsx';
@@ -39,10 +38,6 @@ const router = createBrowserRouter([
       {
         path: '/products/:id',
         element: <ProductDetail />
-      },
-      {
-        path: '/carts/',
-        element: <Carts />
       },
       {
         path: '/carts/:id',

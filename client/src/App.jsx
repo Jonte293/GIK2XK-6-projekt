@@ -12,7 +12,7 @@ function App() {
             <Link to="/products"> Produkter </Link>
           </Typography>
           <Button color="inherit">
-          <Link to="carts/16"><ShoppingCartOutlinedIcon/></Link>
+          <Link to="carts/1"><ShoppingCartOutlinedIcon/></Link>
           
           </Button>
         </Toolbar>

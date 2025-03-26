@@ -46,7 +46,7 @@ export async function create(cart) {
 
 export async function update(cart) {
     try{
-        const response = await axios.put('/carts', cart);
+        const response = await axios.put(`/carts/${cart.id}`, cart);
         if(response.status === 200) return response.data;
         else {
             console.log(response.data);
@@ -74,6 +74,22 @@ export async function addProduct(cartId, product) {
     try{
         const response = await axios.post(`/carts/${cartId}/addProduct`, product);
         if(response.status === 200) return response.data;
+        else {
+            console.log(response.data);
+            return null;
+        }
+    } catch (e) {
+        e?.response ? console.log(e.response.data) : console.log(e);
+    }
+}
+
+export async function removeCartProduct(cartId, productId) {
+    try {
+        const response = await axios.delete(`/carts/${cartId}/removeProduct`, {
+            data: { productId }
+        });
+
+        if (response.status === 200) return response.data;
         else {
             console.log(response.data);
             return null;

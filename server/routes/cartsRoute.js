@@ -32,14 +32,22 @@ router.post('/', (req, res) => {
 });
 
 
-  router.put('/', (req, res) => {
-    const cart = req.body;
-    const id = cart.id;
-  
-    cartService.update(cart, id).then((result) => {
-      res.status(result.status).json(result.data);
-    });
+router.put('/:id', (req, res) => {
+  const cartId = req.params.id; // Hämtar id från URL-parametern
+  const updatedCart = req.body; // Hämtar hela cart-objektet från body
+
+  cartService.update(updatedCart, cartId).then((result) => {
+      // Om uppdateringen lyckas
+      if (result) {
+          res.status(200).json(result.data);
+      } else {
+          res.status(400).json({ error: 'Kundvagn kunde inte uppdateras.' });
+      }
+  }).catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: 'Internt serverfel.' });
   });
+});
   
   router.delete('/', (req, res) => {
     const id = req.body.id;
