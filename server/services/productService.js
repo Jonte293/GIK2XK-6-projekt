@@ -170,7 +170,13 @@ async function getById(id) {
 async function getByCategory(categoryId) {
   try {
     const category = await db.category.findOne({ where: { id: categoryId } });
-    const allProducts = await category.getProducts({ include: [db.category] });
+    const allProducts = await category.getProducts({ include: [
+      db.category,
+    {
+      model: db.rating,
+      include: [db.user],
+    }
+    ] });
     // Om allt blev bra, returnera allProducts
     return createResponseSuccess(
       allProducts.map((product) => _formatProduct(product))

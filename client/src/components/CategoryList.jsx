@@ -1,9 +1,16 @@
 import Category from './Category';
 import { useEffect, useState } from 'react';
+import { useParams, useLocation} from 'react-router-dom';
 import { getAll } from '../services/CategoryService';
 import { Box } from '@mui/material';
 
 function CategoryList() {
+
+  console.log(useParams(), useLocation());
+  const location = useLocation();
+
+
+  
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

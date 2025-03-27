@@ -13,10 +13,12 @@ function Products() {
     <Container>
      <Box display='flex' alignItems="center" gap={2} mt={-2} mb={2}>
      <Typography variant='h2'>Kategorier: </Typography>
-        <Link to={`/products`}>
+     <Link to={`/products`}>
       <Chip icon={<Inventory2Icon/>} label={'Alla Produkter'}></Chip>
     </Link>
+    <Box>
       <CategoryList/>
+      </Box>
         <Button
           sx={{ ml: 'auto'}}
           variant='contained'
@@ -31,4 +33,3 @@ function Products() {
   );
 }
 export default Products;
-Typography
