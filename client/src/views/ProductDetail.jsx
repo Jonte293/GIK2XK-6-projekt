@@ -101,6 +101,7 @@ function ProductDetail() {
         {showReviewForm && (
           <Box sx={{ mt: 2, mb: 2 }}>
             <TextField
+            sx={{ mt: 1, mb: 1 }}
               label='Skriv din recension'
               name='review'
               fullWidth
@@ -109,9 +110,7 @@ function ProductDetail() {
               value={product.review}
               onChange={onChange}
             />
-            <Button onClick={onSave} variant='contained'>
-              Publicera Rescension
-            </Button>
+
 
             {/* Fick hjälp av chatgpt med att ta värdet från HoverRating och lägga in i rating.score */}
             <HoverRating
@@ -123,6 +122,11 @@ function ProductDetail() {
                 }));
               }}
             />
+                        <Button 
+                        sx={{ mt: 1, mb: 1 }}
+                        onClick={onSave} variant='contained'>
+              Publicera Rescension
+            </Button>
           </Box>
         )}
       </div>
@@ -130,7 +134,7 @@ function ProductDetail() {
       <ul>
         <li>
           {product.ratings.map((rating) => (
-            <Card key={rating.id} sx={{ mb: 2, mr: 6, p: 1 }}>
+            <Card key={rating.id} sx={{ mb: 2, p: 1 }}>
               
               <CardContent sx={{ padding: '8px' }}>
                 <div>

@@ -71,8 +71,9 @@ const handleCloseModal = () => {
 return cart ? (
 <div>
   <CartProduct cart={cart} updateCart={updateCart}/>
-  <Button variant="contained" color="primary" onClick={handlePayment}> Betala </Button>
   <Button onClick={() => navigate(-1)}>Tillbaka</Button>
+  <Button variant="contained" color="primary" onClick={handlePayment}> Betala </Button>
+  
 
   <Modal open={modalOpen} onClose={handleCloseModal}>
           <div style={{

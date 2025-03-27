@@ -32,36 +32,44 @@ function ProductItemLarge() {
     : 0;
 
   return product ? (
-    <Paper sx={{ my: 4, p: 4, borderRadius: 2 }} elevation={3}>
-      <Box>
-        <Typography variant='h4'>{product.name}</Typography>
-        <Typography
-        variant='h6'
-        >{product.price} kr</Typography>
+    <Paper sx={{ my: 2, p: 4, borderRadius: 2 }} elevation={3}>
+    <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row-reverse' }}>
+      <Card elevation={0}>
+        <CardMedia
+          sx={{ width: '100%', height: 200, minHeight: 350, objectFit: 'contain' }}
+          component="img"
+          image={product.imageUrl}
+          alt={product.name}
+        />
+      </Card>
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant="h4">{product.name}</Typography>
+        <Typography variant="h6">{product.price} kr</Typography>
+        {product.category && (
+            <Category
+              key={`category_${product.category.id}`}
+              id={product.category.id}
+              text={product.category.name}
+            />
+          )}
 
-        <Card elevation={0}>
-          <CardMedia
-            sx={{ width: 350, height: 350 }}
-            component='img'
-            image={product.imageUrl}
-          />
-          <CardContent>
-            <Typography sx={{ my: 2 }} variant='p'>
-              {product.description}
-            </Typography>
-            {product.category && (
-              <Category
-                key={`category_${product.category.id}`}
-                id={product.category.id}
-                text={product.category.name}
-              />
-            )}
-          </CardContent>
-        </Card>
+        <CardContent>
+          <Typography sx={{ ml: -2, mb: 20 }} variant="body1">
+            {product.description}
+          </Typography>
+          
+        </CardContent>
       </Box>
-      <Rating value={averageRating} precision={0.5} readOnly />
-      <AddToCartButton product={product}></AddToCartButton>
-    </Paper>
+    </Box>
+    <Typography variant="h6">
+      Lägg vara i kundvagn:
+    <AddToCartButton product={product}/>
+    </Typography>
+    <Rating 
+    sx={{mr: 5}}
+    value={averageRating} precision={0.5} readOnly />
+    
+  </Paper>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>
   );
