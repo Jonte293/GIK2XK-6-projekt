@@ -13,7 +13,13 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, PATCH, POST, DELETE');
+    
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200); // Skicka OK för preflight
+    }
+
     next();
+
 });
 
 app.use("/carts", require("./routes/cartsRoute"));

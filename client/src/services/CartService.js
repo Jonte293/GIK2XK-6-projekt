@@ -57,9 +57,9 @@ export async function update(cart) {
     }
 }
 
-export async function remove(id) {
+export async function remove(id, cart) {
     try{
-        const response = await axios.delete('/carts', { data: { id } });
+        const response = await axios.delete(`/carts/${cart.id}`, { data: { id } });
         if(response.status === 200) return response.data;
         else {
             console.log(response.data);
@@ -85,9 +85,7 @@ export async function addProduct(cartId, product) {
 
 export async function removeCartProduct(cartId, productId) {
     try {
-        const response = await axios.delete(`/carts/${cartId}/removeProduct`, {
-            data: { productId }
-        });
+        const response = await axios.delete(`/carts/${cartId}/removeProduct/${productId}`);
 
         if (response.status === 200) return response.data;
         else {
