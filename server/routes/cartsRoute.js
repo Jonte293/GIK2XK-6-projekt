@@ -96,11 +96,11 @@ router.delete('/:cartId/removeProduct/:productId', async (req, res) => {
 }); */
 
   
-  /* router.delete('/', (req, res) => {
+  router.delete('/:id', (req, res) => {
     const id = req.body.id;
-    cartService.destroy(id).then((result) => {
+    cartService.deleteCart(id).then((result) => {
       res.status(result.status).json(result.data);
     });
-  }); */
+  });
   
   module.exports = router;

@@ -69,6 +69,14 @@ async function getAll() {
         return createResponseError(404, 'Hittade ingen kundvagn att uppdatera.');
       }
 
+      if (cart.payed !== undefined) {
+        await existingCart.update({ payed: cart.payed });
+
+        if (cart.payed === true) {
+          await db.cartRow.destroy({ where: { cartId: existingCart.id } });
+      }
+    }
+
       if (cart.products && cart.products.length > 0) {
         for (const item of cart.products) {
           const productId = await _findOrCreateProductId(item.name);
@@ -130,20 +138,23 @@ async function getAll() {
     }
 }
 
-  /* async function destroy(id) {
+/*   async function destroy(id) {
     if (!id) {
       return createResponseError(422, 'Id är obligatoriskt');
     } 
     try {
-    }  */
-/*     try {
+    }  
+     try {
       await db.cartRow.destroy({
         where: { cartId, cart.id }
       });
     } catch (error) {
       return createResponseError(error.status, error.message);
-    } */
-    /* try {
+    } 
+  } */
+
+    async function deleteCart(id) {
+    try {
       await db.cartRow.destroy ({
         where: {cartId:id}
       })
@@ -154,7 +165,8 @@ async function getAll() {
     } catch (error) {
       return createResponseError(error.status, error.message);
     }
-  } */
+  }
+  
 
   
   
@@ -248,7 +260,8 @@ async function getAll() {
         getById,
         create,
         update,
-        removeProductFromCart
+        removeProductFromCart,
+        deleteCart
       };
       
   

@@ -17,7 +17,7 @@ function ProductList({ pathname }) {
       
       {products?.length > 0 ? (
         products.map((product) => (
-          <Grid2  size={{ xs: 2, sm: 4, md: 3 }}>
+          <Grid2  size={{ xs: 6, sm: 4, md: 3 }}>
             <ProductItemSmall className='.product-cardItem' product={product} />
             </Grid2>
         ))

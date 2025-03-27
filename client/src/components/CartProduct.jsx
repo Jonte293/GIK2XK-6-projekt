@@ -1,31 +1,15 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+
 import { update, removeCartProduct } from "../services/CartService"; 
-import { Chip } from '@mui/material';
-import { getOne } from "../services/CartService";
+import { Chip, Button, Modal } from '@mui/material';
 
-function CartProduct(/* { cart } */) {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    /* const [cartState, setCartState] = useState(cart); */
 
-    const emptyCart = {
-      id: 0,
-      products: [],
-      user: { username: "" }
-    };
+function CartProduct({ cart, updateCart } ) {
+    /* const [cartState, setCart] = useState(cart); */
 
-    const [cart, setCart] = useState(emptyCart);
 
-    useEffect(() => {
-      if (id) {
-        getOne(id).then((cartData) => setCart(cartData));
-      } else {
-        setCart(emptyCart);
-      }
-    }, [id]);
 
-    /* useEffect(() => {
+
+     /* useEffect(() => {
       const fetchCart = async () => {
         const cartData = await getOne(id); // Hämta kundvagnens data baserat på ID
         if (cartData) {
@@ -35,7 +19,7 @@ function CartProduct(/* { cart } */) {
         }
       };
       fetchCart();
-  }, [id]); */
+  }, [id]); */ 
 
     const handleQuantityChange = async (product, quantityChange) => {
         const updatedProducts = cart.products.map((p) =>
@@ -45,7 +29,6 @@ function CartProduct(/* { cart } */) {
         );
 
         const updatedCart = { ...cart, products: updatedProducts };
-        setCart(updatedCart);
 
         if (updatedCart.id) {
           await update(updatedCart);
@@ -68,35 +51,45 @@ function CartProduct(/* { cart } */) {
         console.log("✅ Produkt borttagen:", productToDelete);
     
         // ✅ Uppdatera state direkt så att produkten försvinner från listan
-        setCart(prevCart => ({
-          ...prevCart,
-          products: prevCart.products.filter(product => product.id !== productToDelete.id)
-        }));
+        const updatedCart = {
+          ...cart,
+          products: cart.products.filter(product => product.id !== productToDelete.id)
+        };
+        updateCart(updatedCart);
     
       } catch (error) {
         console.error("❌ Fel vid borttagning:", error);
       }
     }
+
+
+    
+
+
     
 
     return (
       <div style={{ border: "1px solid black", margin: "5px", padding: "10px" }}>
-        <h4>Kundvagns id: {cart.id}</h4>
-        <h4>Användare: {cart.user?.username || "Okänd användare"}</h4>
-        <ul>
-          {cart.products
-            .filter((product) => product.name) // Filtrerar bort produkter utan id
-            .map((product) => (
-              <li key={`product-${product.name}`} style={{ marginBottom: "10px" }}>
-                <p>Produkt: {product.name}</p>
-                <p>Antal: {product.quantity}</p>
-                <p>Pris: ${product.price}</p>
-                <button onClick={() => handleQuantityChange(product, -1)}>-</button>
-                <button onClick={() => handleQuantityChange(product, 1)}>+</button>
-                <Chip onDelete={() => onProductDelete(product)} key={`chip-${product.name}`} label={product.name} />
-              </li>
-            ))}
-        </ul>
+        {cart ? (
+          <>
+            <h4>Kundvagns id: {cart.id}</h4>
+            <h4>Användare: {cart.user?.username || "Okänd användare"}</h4>
+            <ul>
+              {cart.products.map((product) => (
+                  <li key={`product-${product.name}`} style={{ marginBottom: "10px" }}>
+                    <p>Produkt: {product.name}</p>
+                    <p>Antal: {product.quantity}</p>
+                    <p>Pris: ${product.price}</p>
+                    <button onClick={() => handleQuantityChange(product, -1)}>-</button>
+                    <button onClick={() => handleQuantityChange(product, 1)}>+</button>
+                    <Chip onDelete={() => onProductDelete(product)} key={`chip-${product.name}`} label={product.name} />
+                  </li>
+                ))}
+            </ul>
+                    </>
+                ) : (
+                    <p>✅ Betalning genomförd! Din beställning är på väg 🚚</p>
+                )}
       </div>
     );
 }

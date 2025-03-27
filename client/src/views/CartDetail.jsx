@@ -1,31 +1,71 @@
-
 import CartProduct from "../components/CartProduct";
 import { useEffect, useState } from "react";
-import { getOne } from '../services/CartService';
+import { createEmptyCart, getOne } from '../services/CartService';
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, Modal } from '@mui/material';
+import { update } from "../services/CartService";
 
 function CartDetail() {
   const { id } = useParams();
-  console.log(id)
   const [cart, setCart] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  console.log("Cart ID from useParams:", id);
 
   useEffect(() => {
-    getOne(id).then((cart) => setCart(cart));
+    getOne(id).then((cart) => {
+      if (cart && cart.payed) {
+        createEmptyCart().then((newCart) => setCart(newCart));
+      } else {
+        setCart(cart);
+      }
+    });
   }, [id]);
+
+  const updateCart = (updatedCart) => {
+    setCart(updatedCart); // Uppdatera kundvagnens tillstånd i föräldern
+  };
   
-  const navigate = useNavigate();
+
+  const handlePayment = async () => {
+    try {
+        const updatedCart = { ...cart, payed: true };
+        await update(updatedCart); 
+
+        const newCart = await createEmptyCart();
+        setCart(newCart); 
+
+        setModalOpen(true); 
+    } catch (error) {
+        console.error("Fel vid betalning:", error);
+    }
+};
+
+const handleCloseModal = () => {
+  setModalOpen(false);
+  navigate("/"); // Gå tillbaka till en annan sida efter betalningen
+};
 
 return cart ? (
 <div>
-<CartProduct cart={cart}/>
-<Button onClick={() => navigate(-1)}>Tillbaka</Button>
+  <CartProduct cart={cart} updateCart={updateCart}/>
+  <Button variant="contained" color="primary" onClick={handlePayment}> Betala </Button>
+  <Button onClick={() => navigate(-1)}>Tillbaka</Button>
+
+  <Modal open={modalOpen} onClose={handleCloseModal}>
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white", padding: "20px", borderRadius: "10px"
+          }}>
+            <h3>✅ Betalning genomförd!</h3>
+            <p>Varorna är framme inom 2 arbetsdagar 🚚</p>
+            <Button variant="contained" onClick={handleCloseModal}>Stäng</Button>
+          </div>
+  </Modal>
 </div>
 ) : (
   <h3>Kunde inte hitta kundvagn</h3>
 );
 }
 export default CartDetail;
-

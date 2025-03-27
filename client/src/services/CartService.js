@@ -70,18 +70,6 @@ export async function remove(id, cart) {
     }
 }
 
-export async function addProduct(cartId, product) {
-    try{
-        const response = await axios.post(`/carts/${cartId}/addProduct`, product);
-        if(response.status === 200) return response.data;
-        else {
-            console.log(response.data);
-            return null;
-        }
-    } catch (e) {
-        e?.response ? console.log(e.response.data) : console.log(e);
-    }
-}
 
 export async function removeCartProduct(cartId, productId) {
     try {
@@ -95,4 +83,36 @@ export async function removeCartProduct(cartId, productId) {
     } catch (e) {
         e?.response ? console.log(e.response.data) : console.log(e);
     }
+}
+
+export const createEmptyCart = async () => {
+    try {
+      
+      const newCart = {
+        id: 0,  
+        products: [],
+        payed: false,
+        user: null, 
+      };
+  
+      return newCart; 
+  
+    } catch (error) {
+      console.error("Fel vid skapande av ny kundvagn:", error);
+      throw error;
+    }
+  };
+
+
+  export async function addProduct(cartId, product) {
+    await axios.put(`/carts/${cartId}`, {
+        id: cartId,
+        payed: false,
+        products: [
+          {
+            name: product.name,
+            quantity: 1
+          }
+        ]
+      });
 }
