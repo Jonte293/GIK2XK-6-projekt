@@ -1,6 +1,6 @@
 import CartProduct from "../components/CartProduct";
 import { useEffect, useState } from "react";
-import { createEmptyCart, getOne } from '../services/CartService';
+import { createEmptyCart, getOne, create, removeCartProduct } from '../services/CartService';
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Modal } from '@mui/material';
 import { update } from "../services/CartService";
@@ -15,7 +15,7 @@ function CartDetail() {
   useEffect(() => {
     getOne(id).then((cart) => {
       if (cart && cart.payed) {
-        createEmptyCart().then((newCart) => setCart(newCart));
+        createEmptyCart().then((emptiedCart) => setCart(emptiedCart));
       } else {
         setCart(cart);
       }
@@ -32,10 +32,32 @@ function CartDetail() {
         const updatedCart = { ...cart, payed: true };
         await update(updatedCart); 
 
-        const newCart = await createEmptyCart();
-        setCart(newCart); 
+        const newCart = {
+          ...cart,
+          id: undefined,     
+          payed: true,
+          userId: 1  
+        };
+        await create(newCart);
 
-        setModalOpen(true); 
+        for (const product of cart.products) {
+          await removeCartProduct(cart.id, product.id);
+      }
+
+        const emptiedCart = { 
+          ...cart,
+          userId: 1, 
+          products: [], 
+          payed: false  
+      };
+
+      await update(emptiedCart);
+
+      const refreshedCart = await getOne(cart.id);
+      setCart(refreshedCart);
+
+        setModalOpen(true);
+
     } catch (error) {
         console.error("Fel vid betalning:", error);
     }

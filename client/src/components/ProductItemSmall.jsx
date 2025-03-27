@@ -1,9 +1,6 @@
-/* import { useState } from 'react'; */
 import { Link, useNavigate } from 'react-router-dom';
 import Category from './Category';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-/* import { addProduct } from '../services/CartService'; */
 import AddToCartButton from './AddToCartButton';
 import {
   Box,
@@ -79,8 +76,9 @@ function ProductItemSmall({ product }) {
         <Typography variant='body2'>{product.description}</Typography>
       </CardContent>
 
-      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <AddToCartButton product={product}></AddToCartButton>
+      <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <AddToCartButton 
+         product={product}></AddToCartButton>
         <Button
           onClick={() => navigate(`/products/${product.id}`)}
           endIcon={<ChevronRightIcon />}

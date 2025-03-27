@@ -22,13 +22,12 @@ const AddToCartButton = ({ product }) => {
 
   return (
         <Button
-          size='small'
-          variant='contained'
-          startIcon={<AddShoppingCartIcon />}
+          startIcon={<AddShoppingCartIcon 
+            fontSize="large"/>}
           onClick={handleAddToCart}
           color={added ? 'success' : 'primary'}
+
         >
-          {added ? 'Tillagd!' : 'Lägg i varukorg'}
         </Button> 
   );
 

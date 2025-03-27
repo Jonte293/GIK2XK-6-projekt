@@ -22,7 +22,7 @@ function ProductEdit() {
   const navigate = useNavigate();
   // useMemo för att få bort en varning om reactHooks
   const emptyProduct = useMemo(
-    () => ({ id: 0, name: '', price: '', description: '', imageUrl: '', category: null }),
+    () => ({ id: 0, name: '', price: '', description: '', imageUrl: '', categoryId: null }),
     []
   );
   const [product, setProduct] = useState(emptyProduct);
@@ -42,6 +42,17 @@ function ProductEdit() {
       setCategory(category);
     });
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0 && !product.categoryId) {
+      setProduct((prev) => ({
+        ...prev,
+        categoryId: categories[0].id,
+      }));
+    }
+  }, [categories, product.categoryId]);
+
+  
 
   function onChange(e) {
     const name = e.target.name;

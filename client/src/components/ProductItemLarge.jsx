@@ -11,6 +11,7 @@ import {
   Rating,
   Typography,
 } from '@mui/material';
+import AddToCartButton from './AddToCartButton';
 
 function ProductItemLarge() {
   const { id } = useParams();
@@ -63,11 +64,13 @@ function ProductItemLarge() {
         </Card>
       </Box>
       <Rating value={averageRating} precision={0.5} readOnly />
+      <AddToCartButton 
+         product={product}></AddToCartButton>
     </Paper>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>
   );
 }
-
+AddToCartButton 
 export default ProductItemLarge;
 Box;

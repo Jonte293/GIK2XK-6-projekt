@@ -55,7 +55,7 @@ export async function update(product) {
 
 export async function remove(id) {
     try{
-        const response = await axios.delete('/products', { data: { id } });
+        const response = await axios.delete(`/products/${id}`, { data: { id } });
         if(response.status === 200) return response.data;
         else {
             console.log(response.data);

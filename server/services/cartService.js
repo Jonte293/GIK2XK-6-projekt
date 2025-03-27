@@ -55,8 +55,6 @@ async function getAll() {
   }
 
   async function update(cart, id) {
-
-
     if (!id) {
       return createResponseError(422, 'Id är obligatoriskt');
     }
@@ -78,28 +76,7 @@ async function getAll() {
     }
 
       if (cart.products && cart.products.length > 0) {
-        for (const item of cart.products) {
-          const productId = await _findOrCreateProductId(item.name);
-
-          if (item.quantity === 0) {
-            // Ta bort cartRow om produkten inte längre ska vara i kundvagnen
-            await db.cartRow.destroy({
-                where: { cartId: existingCart.id, productId: productId }
-            });
-        } else {
-            const quantity = item.quantity || 1;
-
-          const [cartRow, created] = await db.cartRow.findOrCreate({
-            where: { cartId: existingCart.id, productId: productId },
-            defaults: { quantity: quantity }
-          });
-          
-          if (!created) {
-            // Produkten finns redan i kundvagnen → uppdatera kvantiteten istället
-            await cartRow.update({ quantity: quantity });
-          }
-          }
-        }
+        await _addProductToCart(existingCart, cart.products);
       }
       const updatedCart = await db.cart.findOne({
         where: { id },
@@ -138,20 +115,6 @@ async function getAll() {
     }
 }
 
-/*   async function destroy(id) {
-    if (!id) {
-      return createResponseError(422, 'Id är obligatoriskt');
-    } 
-    try {
-    }  
-     try {
-      await db.cartRow.destroy({
-        where: { cartId, cart.id }
-      });
-    } catch (error) {
-      return createResponseError(error.status, error.message);
-    } 
-  } */
 
     async function deleteCart(id) {
     try {
@@ -167,57 +130,23 @@ async function getAll() {
     }
   }
   
-
-  
-  
-/*   async function _addProductToCart(cart, products) {
-    await db.cartRow.destroy({ where: { cartId: cart.id } });
-  
-    if (products) {
-      products.forEach(async (product) => {
-        const productId = await _findOrCreateProductId(product);
-        await cart.addProduct(productId);
-      });
-    }
-  } */
-
-    //Chatgpt lösning!!!
-
     async function _addProductToCart(cart, products) {
 
-      await db.cartRow.destroy({ where: { cartId: cart.id } });
-    
       if (products && products.length > 0) {
         for (const item of products) {
           const name = typeof item === "string" ? item : item.name;
           const quantity = typeof item === "string" ? 1 : item.quantity || 1;
-    
+
           const productId = await _findOrCreateProductId(name);
-    
-          await db.cartRow.create({
-            cartId: cart.id,
-            productId: productId,
-            quantity: quantity
+
+          await db.cartRow.findOrCreate({
+            where: { cartId: cart.id, productId: productId },
+            defaults: {quantity: quantity}
           });
         }
       }
     }
 
-/*     async function _addProductToCart(cart, products) {
-      if (products) {
-        // First, clear existing cart rows to prevent duplicates
-        await db.cartRow.destroy({ where: { cartId: cart.id } });
-    
-        // Loop through products and add them with quantity
-        for (const product of products) {
-          const productId = await _findOrCreateProductId(product);
-          const quantity = product.quantity || 1; // Default to 1 if no quantity is provided
-    
-          // Assuming cart.addProduct supports an association table
-          await cart.addProduct(productId, { through: { quantity } });
-        }
-      }
-    } */
 
   async function _findOrCreateProductId(name) {
     name = name.toLowerCase().trim();

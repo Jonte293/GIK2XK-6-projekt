@@ -1,27 +1,20 @@
 import { update, removeCartProduct } from '../services/CartService';
-import { Chip, Button, Modal, Paper, Box, Typography } from '@mui/material';
+import {
+  Chip,
+  Button,
+  Modal,
+  Paper,
+  Box,
+  Typography,
+  CardMedia,
+} from '@mui/material';
 
 function CartProduct({ cart, updateCart }) {
-  /* const [cartState, setCart] = useState(cart); */
-
-  /* useEffect(() => {
-      const fetchCart = async () => {
-        const cartData = await getOne(id); // Hämta kundvagnens data baserat på ID
-        if (cartData) {
-          setCartState(cartData); // Sätt kundvagnen i state
-        } else {
-          console.error("Failed to fetch cart");
-        }
-      };
-      fetchCart();
-  }, [id]); */
-
   const handleQuantityChange = async (product, quantityChange) => {
     const updatedProducts = cart.products.map((p) =>
       p.id === product.id
         ? { ...p, quantity: Math.max(1, p.quantity + quantityChange) }
         : p
-        
     );
 
     const updatedCart = { ...cart, products: updatedProducts };
@@ -67,41 +60,68 @@ function CartProduct({ cart, updateCart }) {
           <Box sx={{ mb: 4 }}>
             <h4>Kundvagns id: {cart.id}</h4>
             <h4>Användare: {cart.user?.username || 'Okänd användare'}</h4>
+            {
+              <Typography variant='p'>
+                Totalt:{' '}
+                {cart.products.reduce(
+                  (sum, p) => sum + p.price * p.quantity,
+                  0
+                )}{' '}
+                kr
+              </Typography>
+            }
+            <Box
+              sx={{
+                my: 2,
+                borderTop: '1px solid #ccc',
+                marginTop: '10px',
+                paddingTop: '10px',
+              }}
+            ></Box>
+            {cart.products.map(
+              (product) => (
+                console.log(product.imageUrl),
+                (
+                  <Box
+                    key={`product-${product.name}`}
+                    sx={{
+                      marginBottom: '10px',
+                      paddingBottom: '10px',
+                      borderBottom: '1px solid #ccc',
+                    }}
+                  >
+                    <Typography variant='h6'>
+                      Produkt: {product.name}
+                    </Typography>
+                    <Typography variant='h6'>
+                      Antal: {product.quantity}
+                    </Typography>
+                    <Typography variant='h6'>
+                      Pris: {product.price * product.quantity} SEK
+                    </Typography>
+                    <Button
+                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
+                      onClick={() => handleQuantityChange(product, -1)}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
+                      onClick={() => handleQuantityChange(product, 1)}
+                    >
+                      +
+                    </Button>
+                    <Chip
+                      sx={{ ml: 1 }}
+                      onDelete={() => onProductDelete(product)}
+                      key={`chip-${product.name}`}
+                      label={product.name}
+                    />
 
-            {cart.products.map((product) => (
-              <Box
-                key={`product-${product.name}`}
-                style={{ marginBottom: '10px' }}
-              >
-                <Typography variant='h6'>Produkt: {product.name}</Typography>
-                <Typography variant='h6'>Antal: {product.quantity}</Typography>
-                <Typography variant='h6'>Pris: ${product.price}</Typography>
-                {/*                     <p>Produkt: {product.name}</p>
-                    <p>Antal: {product.quantity}</p>
-                    <p>Pris: ${product.price}</p>
-                    <button onClick={() => handleQuantityChange(product, -1)}>-</button>
-                    <button onClick={() => handleQuantityChange(product, 1)}>+</button>
-                    <Chip onDelete={() => onProductDelete(product)} key={`chip-${product.name}`} label={product.name} /> */}
-                <Button
-                  sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
-                  onClick={() => handleQuantityChange(product, -1)}
-                >
-                  -
-                </Button>
-                <Button
-                  sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
-                  onClick={() => handleQuantityChange(product, 1)}
-                >
-                  +
-                </Button>
-                <Chip
-                  sx={{ ml: 1 }}
-                  onDelete={() => onProductDelete(product)}
-                  key={`chip-${product.name}`}
-                  label={product.name}
-                />
-              </Box>
-            ))}
+                  </Box>
+                )
+              )
+            )}
           </Box>
         </>
       ) : (
@@ -110,5 +130,5 @@ function CartProduct({ cart, updateCart }) {
     </Paper>
   );
 }
-
+CardMedia;
 export default CartProduct;

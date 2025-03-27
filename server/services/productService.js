@@ -58,15 +58,22 @@ async function update(product, id) {
   }
 }
 
-/*  async function getAll() {
-      try {
-        const allProducts = await db.product.findAll({ include: [db.category, db.rating, db.user]});
-        
-        return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
-      } catch (error) {
-        return createResponseError(error.status, error.message);
-      }
-    } */
+async function deleteProduct(id) {
+  try {
+    await db.cartRow.destroy({
+      where: { productId: id },
+    });
+    await db.rating.destroy({
+      where: { productId: id },
+    });
+    await db.product.destroy({
+      where: { id },
+    });
+    return createResponseMessage(200, 'Produkten togs bort');
+  } catch (error) {
+    return createResponseError(error.status, error.message);
+  }
+}
 
 async function getAll() {
   try {
@@ -106,44 +113,6 @@ async function getById(id) {
     return createResponseError(error.status, error.message);
   }
 }
-
-/*   async function _addCategoryToProduct(category) {
-    if (category) {
-      const categoryId = await _findOrCreateCategoryId(category);
-      await post.addCategory(categoryId);
-    }
-  }
- 
-     async function _findOrCreateCategoryId(name) {
-      name = name.toLowerCase().trim();
-      const foundOrCreatedCategory = await db.Category.findOrCreate({ where: { name } });
-    
-      return foundOrCreatedCategory[0].id;
-    }
-
-    async function _addCategoryToProduct(product, categoryId) {
-      if (!categoryId) {
-        throw new Error("Missing categoryId");
-      }
-    
-      // Optional: check if category exists (good practice)
-      const category = await db.Category.findByPk(categoryId);
-      if (!category) {
-        throw new Error(`Category with ID ${categoryId} does not exist`);
-      }
-    
-      // Link the product to the category
-      await product.setCategory(category); // use `setCategory` for belongsTo
-    }
-
-          async function _addCategoryToProduct(categories) {
-            if (categories) {
-              categories.forEach(async (category) => {
-                const categoryId = await _findOrCreateCategoryId(category);
-                await post.addCategory(categoryId);
-              });
-            }
-          } */
 
 function _formatProduct(product) {
   const cleanProduct = {
@@ -210,31 +179,6 @@ async function getByCategory(categoryId) {
     return createResponseError(error.status, error.message);
   }
 }
-//TEST
-/*           async function getByCategory(categoryName) {
-            try {
-  
-              const category = await db.category.findOne({
-                where: { name: categoryName }
-              });
-  
-              if (!category) {
-                return createResponseError(404, 'Kategorin hittades inte.')
-              }
-  
-              const products = await db.product.findAll({where: {category_id: category.id}, include: [db.category]
-              });
-  
-              if (products.length === 0) {
-  
-                return createResponseError(404, 'Inga produkter hittades för denna kategori.');
-              }
-  
-              return createResponseSuccess(products.map((product) => _formatProduct(product)));
-            } catch (error) {
-              return createResponseError(error.status, error.message);
-            }
-          } */
 
 async function addRating(id, rating) {
   if (!id) {
@@ -267,9 +211,10 @@ async function removeRating(id) {
 module.exports = {
   create,
   update,
+  deleteProduct,
   getAll,
   getById,
   getByCategory,
   addRating,
-  removeRating
+  removeRating,
 };
