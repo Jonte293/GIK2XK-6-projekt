@@ -1,6 +1,6 @@
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import ProductList from '../components/ProductList';
-import { Box, Button, Chip, Container } from '@mui/material';
+import { Box, Button, Chip, Container, Typography } from '@mui/material';
 import CategoryList from '../components/CategoryList';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 function Products() {
@@ -11,8 +11,8 @@ function Products() {
 
   return (
     <Container>
-      <Box display='flex' alignItems="center" gap={2} mt={-2}>
-        <h2>Kategorier: </h2>
+     <Box display='flex' alignItems="center" gap={2} mt={-2} mb={2}>
+     <Typography variant='h2'>Kategorier: </Typography>
         <Link to={`/products`}>
       <Chip icon={<Inventory2Icon/>} label={'Alla Produkter'}></Chip>
     </Link>
@@ -31,3 +31,4 @@ function Products() {
   );
 }
 export default Products;
+Typography

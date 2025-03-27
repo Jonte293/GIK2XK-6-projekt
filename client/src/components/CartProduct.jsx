@@ -58,17 +58,9 @@ function CartProduct({ cart, updateCart }) {
       {cart ? (
         <>
           <Box sx={{ mb: 4 }}>
-            <h4>Kundvagns id: {cart.id}</h4>
-            <h4>Användare: {cart.user?.username || 'Okänd användare'}</h4>
+          <Typography variant="h4">Användare: {cart.user?.username || "Okänd användare"}</Typography>
             {
-              <Typography variant='p'>
-                Totalt:{' '}
-                {cart.products.reduce(
-                  (sum, p) => sum + p.price * p.quantity,
-                  0
-                )}{' '}
-                kr
-              </Typography>
+            
             }
             <Box
               sx={{
@@ -99,14 +91,14 @@ function CartProduct({ cart, updateCart }) {
                     <Typography variant='h6'>
                       Pris: {product.price * product.quantity} SEK
                     </Typography>
-                    <Button
-                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
+                    <Button size='small'
+                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px', fontSize: '20px'}}
                       onClick={() => handleQuantityChange(product, -1)}
                     >
                       -
                     </Button>
-                    <Button
-                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px' }}
+                    <Button size='small'
+                      sx={{ ml: 1, border: '1px solid', borderRadius: '10px', fontSize: '20px'}}
                       onClick={() => handleQuantityChange(product, 1)}
                     >
                       +
@@ -119,9 +111,18 @@ function CartProduct({ cart, updateCart }) {
                     />
 
                   </Box>
+                  
                 )
               )
             )}
+            <Typography variant='h6'>
+                Totaltpris alla produkter:{' '}
+                {cart.products.reduce(
+                  (sum, p) => sum + p.price * p.quantity,
+                  0
+                )}{' '}
+                kr
+              </Typography>
           </Box>
         </>
       ) : (

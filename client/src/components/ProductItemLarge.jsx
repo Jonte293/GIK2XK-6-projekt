@@ -34,14 +34,10 @@ function ProductItemLarge() {
   return product ? (
     <Paper sx={{ my: 4, p: 4, borderRadius: 2 }} elevation={3}>
       <Box>
+        <Typography variant='h4'>{product.name}</Typography>
         <Typography
-          sx={{
-            fontWeight: 'bold',
-          }}
-        >
-          {product.name}
-        </Typography>
-        <Typography>{product.price}</Typography>
+        variant='h6'
+        >{product.price} kr</Typography>
 
         <Card elevation={0}>
           <CardMedia
@@ -64,13 +60,12 @@ function ProductItemLarge() {
         </Card>
       </Box>
       <Rating value={averageRating} precision={0.5} readOnly />
-      <AddToCartButton 
-         product={product}></AddToCartButton>
+      <AddToCartButton product={product}></AddToCartButton>
     </Paper>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>
   );
 }
-AddToCartButton 
+AddToCartButton;
 export default ProductItemLarge;
 Box;

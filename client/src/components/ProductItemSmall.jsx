@@ -73,7 +73,7 @@ function ProductItemSmall({ product }) {
             />
           )}
         </Box>
-        <Typography variant='body2'>{product.description}</Typography>
+        <Typography variant='p'>{product.description}</Typography>
       </CardContent>
 
       <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>

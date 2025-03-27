@@ -75,7 +75,7 @@ export default function MenuAppBar() {
           </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/products">
-            <h2 style={{ fontWeight: 'bold', color: 'white' }}>Artiklar</h2>
+            <Typography variant='h1'>Artiklar</Typography>
             </Link>
           </Typography> 
            <IconButton color="inherit">
