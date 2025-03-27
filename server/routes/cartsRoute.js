@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const cartService = require('../services/cartService');
+const db = require('../models');
 
 /* router.post('/:id/addProduct', (req, res) => {
     const product = req.body;
@@ -49,8 +50,41 @@ router.put('/:id', (req, res) => {
   });
 });
 
+router.delete('/:cartId/removeProduct/:productId', async (req, res) => {
+  try {
+      const { cartId, productId } = req.params;
+      /* const { cartId } = req.params;
+      const { productId } = req.body;  */// Ta emot productId i request-body
 
-router.delete('/:cartId/removeProduct', (req, res) => {
+      console.log(`Tar bort produkt ${productId} från kundvagn ${cartId}`);
+
+      // Kolla om kundvagnen finns
+      const cart = await db.cart.findByPk(cartId);
+      if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+      // Ta bort produkten från kundvagnen (cartRow-tabellen)
+      await db.cartRow.destroy({
+          where: { cartId, productId }
+      });
+
+      res.status(200).json({ message: "Produkt borttagen från kundvagn" });
+  } catch (error) {
+      console.error("Fel vid borttagning:", error);
+      res.status(500).json({ error: "Något gick fel" });
+  }
+});
+
+/* router.delete('/', (req, res) => {
+  db.product
+    .destroy({
+      where: { id: req.body.id }
+    })
+    .then(() => {
+      res.json(`Produkten togs bort från kundvagnen`);
+    });
+}); */
+
+/* router.delete('/:cartId/removeProduct', (req, res) => {
   const { cartId } = req.params;
   const { productId } = req.body; // Get the productId from the request body
   cartService.removeProductFromCart(cartId, productId).then((result) => {
@@ -59,7 +93,7 @@ router.delete('/:cartId/removeProduct', (req, res) => {
     console.error('Error removing product:', error);
     res.status(500).json({ message: 'Det gick inte att ta bort produkten från kundvagnen' });
 });
-});
+}); */
 
   
   /* router.delete('/', (req, res) => {

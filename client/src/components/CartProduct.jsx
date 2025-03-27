@@ -1,14 +1,31 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { update, removeCartProduct } from "../services/CartService"; 
 import { Chip } from '@mui/material';
 import { getOne } from "../services/CartService";
 
-function CartProduct({ cart }) {
+function CartProduct(/* { cart } */) {
     const { id } = useParams();
-    const [cartState, setCartState] = useState(cart);
+    const navigate = useNavigate();
+    /* const [cartState, setCartState] = useState(cart); */
+
+    const emptyCart = {
+      id: 0,
+      products: [],
+      user: { username: "" }
+    };
+
+    const [cart, setCart] = useState(emptyCart);
 
     useEffect(() => {
+      if (id) {
+        getOne(id).then((cartData) => setCart(cartData));
+      } else {
+        setCart(emptyCart);
+      }
+    }, [id]);
+
+    /* useEffect(() => {
       const fetchCart = async () => {
         const cartData = await getOne(id); // Hämta kundvagnens data baserat på ID
         if (cartData) {
@@ -18,17 +35,17 @@ function CartProduct({ cart }) {
         }
       };
       fetchCart();
-  }, [id]);
+  }, [id]); */
 
     const handleQuantityChange = async (product, quantityChange) => {
-        const updatedProducts = cartState.products.map((p) =>
-            p.name === product.name
+        const updatedProducts = cart.products.map((p) =>
+            p.id === product.id
                 ? { ...p, quantity: Math.max(1, p.quantity + quantityChange) }
                 : p
         );
 
-        const updatedCart = { ...cartState, products: updatedProducts };
-        setCartState(updatedCart);
+        const updatedCart = { ...cart, products: updatedProducts };
+        setCart(updatedCart);
 
         if (updatedCart.id) {
           await update(updatedCart);
@@ -38,39 +55,47 @@ function CartProduct({ cart }) {
       }
     };
 
-    async function onProductDelete(productToDelete){
-      const newProducts = cart.products.filter((product) => product.id !== productToDelete.id);
-
-      setCartState({...cartState, products: newProducts});
-
-      const hardcodedCartId = 1;
-
-      try {
-        // Försök att ta bort produkten från servern
-        await removeCartProduct(hardcodedCartId, productToDelete.id);
-        console.log('Produkt borttagen från kundvagnen:', productToDelete);
-      } catch (error) {
-        console.error('Fel vid borttagning av produkt från kundvagn:', error);
+    async function onProductDelete(productToDelete) {
+      console.log("🛑 Försöker radera produkt:", productToDelete);
+    
+      if (!productToDelete || !productToDelete.id) {
+        console.error("❌ Fel: Produkt saknar id!", productToDelete);
+        return;
       }
-
-      
+    
+      try {
+        await removeCartProduct(cart.id, productToDelete.id);
+        console.log("✅ Produkt borttagen:", productToDelete);
+    
+        // ✅ Uppdatera state direkt så att produkten försvinner från listan
+        setCart(prevCart => ({
+          ...prevCart,
+          products: prevCart.products.filter(product => product.id !== productToDelete.id)
+        }));
+    
+      } catch (error) {
+        console.error("❌ Fel vid borttagning:", error);
+      }
     }
+    
 
     return (
       <div style={{ border: "1px solid black", margin: "5px", padding: "10px" }}>
-        <h4>Kundvagns id: {cartState.id}</h4>
-        <h4>Användare: {cartState.user.username}</h4>
+        <h4>Kundvagns id: {cart.id}</h4>
+        <h4>Användare: {cart.user?.username || "Okänd användare"}</h4>
         <ul>
-          {cartState.products.map((product, index) => (
-            <li key={index} style={{ marginBottom: "10px" }}>
-              <p>Produkt: {product.name}</p>
-              <p>Antal: {product.quantity}</p>
-              <p>Pris: ${product.price}</p>
-              <button onClick={() => handleQuantityChange(product, -1)}>-</button>
-              <button onClick={() => handleQuantityChange(product, 1)}>+</button>
-              <Chip onDelete={() => onProductDelete(product)} key={product.id} label={"ta bort"} />
-            </li>
-          ))}
+          {cart.products
+            .filter((product) => product.name) // Filtrerar bort produkter utan id
+            .map((product) => (
+              <li key={`product-${product.name}`} style={{ marginBottom: "10px" }}>
+                <p>Produkt: {product.name}</p>
+                <p>Antal: {product.quantity}</p>
+                <p>Pris: ${product.price}</p>
+                <button onClick={() => handleQuantityChange(product, -1)}>-</button>
+                <button onClick={() => handleQuantityChange(product, 1)}>+</button>
+                <Chip onDelete={() => onProductDelete(product)} key={`chip-${product.name}`} label={product.name} />
+              </li>
+            ))}
         </ul>
       </div>
     );

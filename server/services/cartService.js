@@ -11,14 +11,23 @@ async function getById(id) {
     const cart = await db.cart.findOne({
       where: { id },
       include: [
-        db.user,
-        db.product,
+        { model: db.user, attributes: ['id', 'username'] }, // Hämtar användare
+        { 
+          model: db.product, 
+          attributes: ['id', 'name', 'price'], // ✅ Se till att 'id' finns med!
+          through: { attributes: ['quantity'] } // ✅ Hämtar antalet från cartRow
+        }
       ]
     });
-    /* Om allt blev bra, returnera post */
+
+    if (!cart) {
+      return createResponseError(404, "Cart not found");
+    }
+
     return createResponseSuccess(_formatCart(cart));
   } catch (error) {
-    return createResponseError(error.status, error.message);
+    console.error("Error fetching cart:", error);
+    return createResponseError(500, "Internal server error");
   }
 }
 
@@ -161,6 +170,8 @@ async function getAll() {
     //Chatgpt lösning!!!
 
     async function _addProductToCart(cart, products) {
+
+      await db.cartRow.destroy({ where: { cartId: cart.id } });
     
       if (products && products.length > 0) {
         for (const item of products) {
@@ -220,6 +231,7 @@ async function getAll() {
       // Hjälp av chatgpt
         if (cart.products) {
           cleanCart.products = cart.products.map(product => ({
+            id: product.id,
             name: product.name,
             price: product.price,
             imageUrl: product.imageUrl,
