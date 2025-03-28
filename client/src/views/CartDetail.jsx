@@ -4,14 +4,13 @@ import { createEmptyCart, getOne, create, removeCartProduct } from '../services/
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Modal } from '@mui/material';
 import { update } from "../services/CartService";
-
+// Hanterar kundvagnen genom visning av innehåll, betalning och tillbaka knapp.
 function CartDetail() {
   const { id } = useParams();
   const [cart, setCart] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-
-
+  // useEffect används för att köra kod när något ändras
   useEffect(() => {
     getOne(id).then((cart) => {
       if (cart && cart.payed) {
@@ -22,16 +21,19 @@ function CartDetail() {
     });
   }, [id]);
 
+  //Uppdaterar kundvagnen när den ändras
   const updateCart = (updatedCart) => {
-    setCart(updatedCart); // Uppdatera kundvagnens tillstånd i föräldern
+    setCart(updatedCart);
   };
   
-
+  // Hanterar betalning av kundvagnen i webbshoppen och uppdatering
+  // av kundvagnen.
   const handlePayment = async () => {
     try {
         const updatedCart = { ...cart, payed: true };
         await update(updatedCart); 
 
+        // Skapar en ny kundvagn med nytt id
         const newCart = {
           ...cart,
           id: undefined,     
@@ -43,7 +45,7 @@ function CartDetail() {
         for (const product of cart.products) {
           await removeCartProduct(cart.id, product.id);
       }
-
+        // Tömmer kundvagnen efter man betalat och payed sätts till false
         const emptiedCart = { 
           ...cart,
           userId: 1, 
@@ -53,6 +55,7 @@ function CartDetail() {
 
       await update(emptiedCart);
 
+      // Hämtar cart med getOne och sätter den tomma kundvagnen så den visas
       const refreshedCart = await getOne(cart.id);
       setCart(refreshedCart);
 
@@ -63,11 +66,13 @@ function CartDetail() {
     }
 };
 
+// Stänger modalfönstrer och användaren navigeras tillbaka till hemsidan
 const handleCloseModal = () => {
   setModalOpen(false);
-  navigate("/"); // Gå tillbaka till en annan sida efter betalningen
+  navigate("/");
 };
-
+// Visar produkter i kundvagnen och knappar för att gå tillbaka och betala
+// med en modal ruta att betalning gått igenom.
 return cart ? (
 <div>
   <CartProduct cart={cart} updateCart={updateCart}/>

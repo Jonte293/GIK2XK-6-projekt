@@ -33,16 +33,3 @@ html, body, #root {
     box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
   } 
-
-
-/* .product-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem;
-    padding: 1rem;
-    background: red;
-  }
-
-.product-cardItem {
-    grid-column: span 3;
-}   */

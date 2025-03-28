@@ -13,7 +13,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider} from "@mui/material/styles";
 import { blue, blueGrey, grey, red, teal } from '@mui/material/colors';
-
+// Teman till hemsidan, bakgrund, knappar och typography
 const theme = createTheme({palette: {
   mode: 'light',
     background: {
@@ -56,7 +56,7 @@ typography: {
     fontSize: "1rem"
   }
 }});
-
+// Skapar de routes som behövs inom react applikationen för navigation
 const router = createBrowserRouter([
   {
     path: '/', 
@@ -96,7 +96,7 @@ const router = createBrowserRouter([
       }
     ]}
 ]);
-
+// Initierar en react applikation och renderar den i HTML elementet med id="root"
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>

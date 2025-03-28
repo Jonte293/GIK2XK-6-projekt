@@ -17,17 +17,21 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 
+// Hanterar redigering och skapande av produkter
 function ProductEdit() {
+  // används för att hämta URL-parametrar
   const { id } = useParams();
+  // används för navigering mellan sidor
   const navigate = useNavigate();
-  // useMemo för att få bort en varning om reactHooks
+  // Används för att skapa en tom produkt.
   const emptyProduct = useMemo(
     () => ({ id: 0, name: '', price: '', description: '', imageUrl: '', categoryId: null }),
     []
   );
+  // useState används för att hantera state i komponenter.
   const [product, setProduct] = useState(emptyProduct);
   const [categories, setCategory] = useState([]);
-
+  // useEffect används för att köra kod när något ändras
   useEffect(() => {
     if (id) {
       getOne(id).then((product) => setProduct(product));
@@ -35,14 +39,14 @@ function ProductEdit() {
       setProduct(emptyProduct);
     }
   }, [emptyProduct, id]);
-
+  // useEffect används för att köra kod när något ändras
   useEffect(() => {
     getAll().then((category) => {
       console.log('Categories:', category);
       setCategory(category);
     });
   }, []);
-
+  // useEffect används för att köra kod när något ändras
   useEffect(() => {
     if (categories.length > 0 && !product.categoryId) {
       setProduct((prev) => ({
@@ -53,7 +57,7 @@ function ProductEdit() {
   }, [categories, product.categoryId]);
 
   
-
+  // Uppdaterar produktens data
   function onChange(e) {
     const name = e.target.name;
     const value = e.target.value;
@@ -61,7 +65,8 @@ function ProductEdit() {
     const newProduct = { ...product, [name]: value };
     setProduct(newProduct);
   }
-
+  // Om produktens id är 0 skapas en ny produkt
+  // Annars uppdateras den befintliga produkten
   function onSave() {
     if (product.id === 0) {
       create(product).then((response) => {
@@ -74,13 +79,15 @@ function ProductEdit() {
     }
   }
 
-
+  // Tar bort en produkt baserat på id
   function onDelete() {
     remove(product.id).then((response) =>
       navigate('/', { replace: true, state: response })
     );
   }
 
+  // Return med saker som textfält, chip, kategori lista,
+  // knappar med dess funktionalitet.
   return (
     <Container>
       <Typography variant="h4" component="h2">Redigera Produkt</Typography>
