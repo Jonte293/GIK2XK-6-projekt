@@ -1,3 +1,5 @@
+// Definierar produkt modellen, den har fälten id, namn, pris,
+// beskrivning och bildUrl.
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('product', {
         id: {

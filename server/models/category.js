@@ -1,3 +1,4 @@
+// Definierar kategori modellen. Den har fälten id och namn
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('category', {
         id: {

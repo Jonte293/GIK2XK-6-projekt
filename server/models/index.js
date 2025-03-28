@@ -37,42 +37,35 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// En kundvagn tillhör en kund, varje kundvagn kan ha många användare.
 db.cart.belongsTo(db.user, { foreignKey: { allowNull: false } });
 db.user.hasMany(db.cart, {
   allowNull: false,
   onDelete: 'CASCADE'
 });
 
-/* db.cartRow.belongsTo(db.cart, { foreignKey: { allowNull: false } });
-db.cart.hasMany(db.cartRow, {
-  allowNull: false,
-  onDelete: 'CASCADE'
-});
-
-db.cartRow.belongsTo(db.product, { foreignKey: { allowNull: false } });
-db.product.hasMany(db.cartRow, {
-  allowNull: false,
-  onDelete: 'CASCADE'
-}); */
-
+// En produkt tillhör en kategori, varje categori kan ha många produkter.
 db.product.belongsTo(db.category, { foreignKey: { allowNull: false } });
 db.category.hasMany(db.product, {
   allowNull: false,
   onDelete: 'CASCADE'
 });
 
+// En betygsättning tillhör en produkt, en produkt kan ha många betyg.
 db.rating.belongsTo(db.product, { foreignKey: { allowNull: false } });
 db.product.hasMany(db.rating, {
   allowNull: false,
   onDelete: 'CASCADE'
 });
 
+// En betygsättning sätts av en användare, en användare kan sätta flera betyg.
 db.rating.belongsTo(db.user, { foreignKey: { allowNull: false } });
 db.user.hasMany(db.rating, {
   allowNull: false,
   onDelete: 'CASCADE'
 });
 
+// En produkt tillhör en kundvagn, en kundvagn kan ha flera produkter
 db.product.belongsToMany(db.cart, { through: db.cartRow });
 db.cart.belongsToMany(db.product, { through: db.cartRow });
 

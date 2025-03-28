@@ -1,3 +1,4 @@
+// Definierar rating modellen, den har fälten id, score, review.
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('rating', {
         id: {

@@ -1,3 +1,4 @@
+// Definierar en cart-modell, den har ett id och en payed "check"
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('cart', {
         id: {

@@ -1,3 +1,4 @@
+// Definierar cartRow modellen som har fälten id och kvantitet
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('cartRow', {
         id: {

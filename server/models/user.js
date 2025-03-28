@@ -1,3 +1,5 @@
+// Definierar user modellen, den har fälten id, email, användarnamn,
+// namn, efternamn, lösenord
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('user', {
         id: {
