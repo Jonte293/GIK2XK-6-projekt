@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 
 
+//productItemSmall gör så att varje produkt i productlist blir till ett card
+// där vi har inkluderat bild, knappar och länkar, även så att rating syns och dess medelbetyg
 
 function ProductItemSmall({ product }) {
   const navigate = useNavigate();

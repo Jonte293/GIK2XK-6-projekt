@@ -3,6 +3,9 @@ import { getAll } from '../services/ProductService';
 import { useEffect, useState } from "react";
 import { Grid2 } from '@mui/material';
 
+// funktion som tar emot pathname och hämtar alla produkter med getall för att,
+// sedan returnera produkterna i en grid med hjälp av productItemSmall där varje
+// produkt som finns visas som ett card.
 function ProductList({ pathname }) {
   const [products, setProducts] = useState([]);
 
@@ -11,7 +14,7 @@ function ProductList({ pathname }) {
           setProducts(products);
       });
   }, [pathname]);
- /*  getAll().then((products) => console.log(products)); */
+
   return (
     <Grid2 container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
       

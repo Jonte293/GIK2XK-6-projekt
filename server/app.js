@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 
 });
-
+// Här har vi så att den request som kommer in skickas till rätt rutt("route")
 app.use("/carts", require("./routes/cartsRoute"));
 app.use("/users", require("./routes/usersRoute"));
 app.use("/products", require("./routes/productsRoute"));

@@ -1,3 +1,6 @@
+
+// denna funktion är till för att returnera en rating som har angivits
+
 function Rating( rating) {
     return( <>
     <h4>Betyg: {rating.rating.score}</h4>

@@ -5,33 +5,20 @@ const {
   createResponseMessage,
 } = require('../helpers/responseHelper');
 
-/*   async function create(product) {
-    try {
-      const newProduct = await db.product.create(product);
-      await _addCategoryToProduct(newProduct, product.category);
-  
-      return createResponseSuccess(newProduct);
-    } catch (error) {
-      return createResponseError(error.status, error.message);
-    }
-  } */
+//funktion som skapar produkt och returnerar produkten,
+// kollar även om kategorin finns för produkten
 async function create(product) {
   try {
-    // Extract categoryId from the full category object (if needed)
     const categoryId = product.category?.id || product.categoryId;
 
     if (!categoryId) {
       throw new Error('Missing categoryId');
     }
 
-    // Inject categoryId directly into the product object before create
     const newProduct = await db.product.create({
       ...product,
       categoryId,
     });
-
-    // If you're using belongsTo, this step isn't strictly needed — but you can keep it for consistency
-    // await _addCategoryToProduct(newProduct, categoryId);
 
     return createResponseSuccess(newProduct);
   } catch (error) {
@@ -39,6 +26,8 @@ async function create(product) {
   }
 }
 
+// updatefunktion som används för att uppdatera en produkt baserat på id
+// finns ett giltigt id så uppdateras produkten och ett meddelande fås om lyckad uppdatering
 async function update(product, id) {
   if (!id) {
     return createResponseError(422, 'Id är obligatoriskt');
@@ -48,7 +37,7 @@ async function update(product, id) {
     if (!existingProduct) {
       return createResponseError(404, 'Hittade ingen produkt att uppdatera.');
     }
-    /*         await _addProductToProduct(existingProduct, product.products); */
+   
     await db.product.update(product, {
       where: { id },
     });
@@ -57,6 +46,10 @@ async function update(product, id) {
     return createResponseError(error.status, error.message);
   }
 }
+
+//deletefunktion som tar bort en produkt i databasen,
+// först så rensas cartrows och ratings på grund av databas hierakin.
+// meddelande om att produkt tagits bort vid lyckad borttagning
 
 async function deleteProduct(id) {
   try {
@@ -75,6 +68,9 @@ async function deleteProduct(id) {
   }
 }
 
+// funktion som hämtar alla produkter i databasen,
+// där vi inkluderar category och rating. returnerar produkterna med _formatproduct
+// för en snyggare formatering av produkterna 
 async function getAll() {
   try {
     const allProducts = await db.product.findAll({
@@ -86,7 +82,7 @@ async function getAll() {
         },
       ],
     });
-    /* Om allt blev bra, returnera allPosts */
+    /* Om allt blev bra, returnera allproducts */
     return createResponseSuccess(
       allProducts.map((product) => _formatProduct(product))
     );
@@ -94,7 +90,8 @@ async function getAll() {
     return createResponseError(error.status, error.message);
   }
 }
-
+//Getbyid funktionen hämtar produkt baserat på id där vi inkluderar category och rating
+// även här returner vi produkten med _formatproduct
 async function getById(id) {
   try {
     const product = await db.product.findOne({
@@ -114,6 +111,8 @@ async function getById(id) {
   }
 }
 
+// Denna funktion ger det format vi vill ha när vi returnerar produkterna
+// Där vi inkluderar den information om produkten vi vill ska komma med
 function _formatProduct(product) {
   const cleanProduct = {
     id: product.id,
@@ -148,6 +147,8 @@ function _formatProduct(product) {
   return cleanProduct;
 }
 
+// getbyid funktionen hämtar produkt baserat på id
+// vi inkluderar category och rating och returnerar produkten med _formatProduct
 async function getById(id) {
   try {
     const product = await db.product.findOne({
@@ -160,13 +161,14 @@ async function getById(id) {
         },
       ],
     });
-    /* Om allt blev bra, returnera post */
+    /* Om allt blev bra, returnera produkt */
     return createResponseSuccess(_formatProduct(product));
   } catch (error) {
     return createResponseError(error.status, error.message);
   }
 }
 
+//Funktion som hämtar alla produkter somm tillhör ett specifikt categoryID 
 async function getByCategory(categoryId) {
   try {
     const category = await db.category.findOne({ where: { id: categoryId } });
@@ -186,6 +188,7 @@ async function getByCategory(categoryId) {
   }
 }
 
+// addrating funktionen gör så att vi kan lägga till en rating på en produkt baserat på id
 async function addRating(id, rating) {
   if (!id) {
     return createResponseError(422, 'Id är obligatoriskt');
@@ -199,6 +202,8 @@ async function addRating(id, rating) {
   }
 }
 
+//funktion som tar bort rating på en produkt baserat på id.
+// inkluderat felmeddelande och meddelande vid lyckad bortagning.
 async function removeRating(id) {
   console.log('Tar bort rescension med id :', id);
   if (!id) {

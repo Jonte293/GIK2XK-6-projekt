@@ -16,20 +16,23 @@ import HomeIcon from '@mui/icons-material/Home';
 import '../index.css';
 
 
+// Komponent som är själva navbaren på hemsidan där klickbara länkar och icons är kopplade
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
+  // triggas när man trycker på logotypen
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
   
-
+ 
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  
+  // hämtar alla kategorier
   useEffect(() => {
     getAll().then((data) => {
       if (data) setCategories(data);
@@ -60,6 +63,8 @@ export default function MenuAppBar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
+            {/* loopar igenom kategorierna och gör en icon för varje id som får onlick som länkar till
+            produkterna som innefattar den kategorin /*/}
             {categories.map((category) => (
               <MenuItem
                 key={category.id}
@@ -73,6 +78,7 @@ export default function MenuAppBar() {
             ))}
 
           </Menu>
+          {/* Denna typgraphy med link gör så att du kommer till products om du trycker på artiklar */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/products">
             <Typography variant='h1'>Artiklar</Typography>
