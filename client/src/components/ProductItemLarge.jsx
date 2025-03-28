@@ -1,5 +1,4 @@
 import Category from './Category';
-import { useParams } from 'react-router-dom';
 import { useMemo} from 'react';
 import {
   Box,
@@ -12,16 +11,10 @@ import {
 } from '@mui/material';
 import AddToCartButton from './AddToCartButton';
 
+// ProductItemLarge komponenten gör så att vi får en mer detaljrik vy på den produkt man klickat på
+
 function ProductItemLarge({ product }) {
-  const { id } = useParams();
-  console.log(id);
- /*  const [product, setProduct] = useState(null); */
-
-/*   useEffect(() => {
-    getOne(id).then((product) => setProduct(product));
-  }, [id]); */
-
-  // ChatGpt lösning, frågade om att räkna ut genomsnittligt betyg
+  // Beräknar genomsnittligt betyg , använder useMemo för att endast räkna om när produkten ändras
   const averageRating = useMemo(() => {
     const scores = product?.ratings?.map(r => r.score).filter(Boolean) || [];
     return scores.length
@@ -29,6 +22,7 @@ function ProductItemLarge({ product }) {
       : 0;
   }, [product]);
 
+// returnera produkten i form av ett card innuti paper. där information om produkten hämtas och skrivs ut 
   return product ? (
     <Paper sx={{ my: 2, p: 4, borderRadius: 2 }} elevation={3}>
     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row-reverse' }}>
@@ -63,6 +57,7 @@ function ProductItemLarge({ product }) {
       Lägg vara i kundvagn:
     <AddToCartButton product={product}/>
     </Typography>
+  // Averagerating skrivs ut med Mui Rating 
     <Rating 
     sx={{mr: 5}}
     value={averageRating} precision={0.5} readOnly />

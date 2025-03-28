@@ -2,7 +2,12 @@ import { Button, Rating, TextField } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useState } from 'react';
 
+// Dennna component innehåller en form för att skriva rescensioner till produkter
+
+
 function RatingForm({ onSave }) {
+  // rating håller den nuvarande rescensionen, setrating ändrar den
+  // emptyRating används för att tömma formuläret
   const emptyRating = {
     review: '',
     score: null,
