@@ -1,7 +1,6 @@
 import Category from './Category';
-import { getOne } from '../services/ProductService';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useMemo} from 'react';
 import {
   Box,
   Card,
@@ -13,23 +12,22 @@ import {
 } from '@mui/material';
 import AddToCartButton from './AddToCartButton';
 
-function ProductItemLarge() {
+function ProductItemLarge({ product }) {
   const { id } = useParams();
   console.log(id);
-  const [product, setProduct] = useState(null);
+ /*  const [product, setProduct] = useState(null); */
 
-  useEffect(() => {
+/*   useEffect(() => {
     getOne(id).then((product) => setProduct(product));
-  }, [id]);
+  }, [id]); */
 
   // ChatGpt lösning, frågade om att räkna ut genomsnittligt betyg
-  const scores =
-    product?.ratings
-      ?.map((rating) => rating.score)
-      .filter((score) => score !== null) || [];
-  const averageRating = scores.length
-    ? scores.reduce((a, b) => a + b, 0) / scores.length
-    : 0;
+  const averageRating = useMemo(() => {
+    const scores = product?.ratings?.map(r => r.score).filter(Boolean) || [];
+    return scores.length
+      ? scores.reduce((a, b) => a + b, 0) / scores.length
+      : 0;
+  }, [product]);
 
   return product ? (
     <Paper sx={{ my: 2, p: 4, borderRadius: 2 }} elevation={3}>
@@ -68,7 +66,6 @@ function ProductItemLarge() {
     <Rating 
     sx={{mr: 5}}
     value={averageRating} precision={0.5} readOnly />
-    
   </Paper>
   ) : (
     <h3>Kunde inte hitta Produkt</h3>

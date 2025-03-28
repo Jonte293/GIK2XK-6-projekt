@@ -1,92 +1,65 @@
 import ProductItemLarge from '../components/ProductItemLarge';
-import HoverRating from '../components/HoverRating';
+import RatingForm from '../components/RatingForm';
 import { useEffect, useState } from 'react';
 import { getOne, addRating, removeRating } from '../services/ProductService';
 import { useNavigate, useParams } from 'react-router-dom';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import EditIcon from "@mui/icons-material/Edit";
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import {
   Box,
   Button,
   Card,
   CardContent,
   Container,
-  Paper,
   Rating,
-  TextField,
 } from '@mui/material';
 
 function ProductDetail() {
   const { id } = useParams();
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [product, setProduct] = useState(null);
 
-  const emptyRating = {
-    id: 0,
-    rating: 0,
-    review: '',
-    userId: 3,
-  };
-  const [rating, setRating] = useState(emptyRating);
-  console.log(id);
 
   useEffect(() => {
     getOne(id).then((product) => setProduct(product));
   }, [id]);
 
-  function onChange(e) {
-    const name = e.target.name;
-    const value = e.target.value;
 
-    const newRating = { ...rating, [name]: value };
-    setRating(newRating);
-  }
-
-  function onSave() {
-    console.log('Sending rating:', rating, 'for product:', product.id);
-
-    addRating(product.id, rating).then((response) => {
-      console.log('Recension sparad:', response);
-      setRating({ review: '', score: 0 }),
-      window.location.reload()
-    });
-  }
   function onDelete(id) {
     if (!id) {
       console.error('Rating ID is undefined');
       return;
     }
-    removeRating(id).then((response) =>
-      navigate( { replace: true, state: response }),
-      window.location.reload()
-    );
+    removeRating(id).then((response) => {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        ratings: prevProduct.ratings.filter((rating) => rating.id !== id), 
+      }));
+      navigate({ replace: true, state: response }); 
+    });
   }
 
-  /*   useEffect(() => {
-    addRating().then(() => {
-      setRating(product.rating);
-    })
-  }, [product.rating]);
- */
+  function onRatingAdd(rating) {
+    addRating(product.id, rating)
+      .then(() => getOne(id))
+      .then((updatedProduct) => {
+        console.log("Fetched updated product with new score:", updatedProduct);
+        setProduct(updatedProduct);
+      })
+      .catch((err) => {
+        console.error("Failed to add rating or fetch product:", err);
+      });
+  }
 
   const navigate = useNavigate();
   return product ? (
     <Container>
       <ProductItemLarge product={product} />
       <Box display="flex"  mt={1}>
+        <Box style={{ display: 'flex', gap: '1rem' }}>
       <Button variant='contained' startIcon={<ChevronLeftIcon />} sx={{mr: 2}} onClick={() => navigate(-1)}>
         Tillbaka
       </Button>
-
-
-      <Button
-        startIcon={<EditNoteIcon />}
-        variant='contained'
-        onClick={() => setShowReviewForm((prev) => !prev)}
-      >
-        {showReviewForm ? 'Stäng Recension' : 'Skriv Recension'}
-      </Button>
+      </Box>
       <Button
         sx={{ ml: 'auto' }}
         variant='contained'
@@ -97,45 +70,12 @@ function ProductDetail() {
         Redigera Produkt
       </Button>
       </Box>
-      <div>
-        {showReviewForm && (
-          <Box sx={{ mt: 2, mb: 2 }}>
-            <TextField
-            sx={{ mt: 1, mb: 1 }}
-              label='Skriv din recension'
-              name='review'
-              fullWidth
-              multiline
-              rows={5}
-              value={product.review}
-              onChange={onChange}
-            />
-
-
-            {/* Fick hjälp av chatgpt med att ta värdet från HoverRating och lägga in i rating.score */}
-            <HoverRating
-              value={Number(rating.score)}
-              onChange={(e, newValue) => {
-                setRating((prev) => ({
-                  ...prev,
-                  score: newValue,
-                }));
-              }}
-            />
-                        <Button 
-                        sx={{ mt: 1, mb: 1 }}
-                        onClick={onSave} variant='contained'>
-              Publicera Rescension
-            </Button>
-          </Box>
-        )}
-      </div>
-
+    
+     <RatingForm onSave={onRatingAdd}/>
       <ul>
         <li>
           {product.ratings.map((rating) => (
             <Card key={rating.id} sx={{ mb: 2, p: 1 }}>
-              
               <CardContent sx={{ padding: '8px' }}>
                 <div>
                   <strong>Recension av:</strong> {rating.user}
@@ -148,7 +88,6 @@ function ProductDetail() {
                     size='small'
                   />
                 )}
-
                 <div>{rating.review}</div>
               </CardContent>
               <Button onClick={() => onDelete(rating.id)} >
