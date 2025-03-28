@@ -1,5 +1,8 @@
 import axios from './api';
 
+/*CartService används för att hantera förfrågningar mot servern med hjälp av axios */
+
+/*Hämtar alla carts från servern */
 export async function getAll(endpoint = '/cart') {
     try {
         const response = await axios.get(endpoint);
@@ -14,10 +17,10 @@ export async function getAll(endpoint = '/cart') {
     }
 }
 
+/* Hämtar en cart, baserat på id */
 export async function getOne(id) {
-    console.log("Fetching cart with ID:", id); // Debugging
     if (!id) {
-        console.error("Cart ID is missing!");
+        console.error("CartId saknas");
         return null;}
     try{
         const response = await axios.get(`/carts/${id}`);
@@ -30,7 +33,7 @@ export async function getOne(id) {
         e?.response ? console.log(e.response.data) : console.log(e);
     }
 }
-
+/* Skapar en kundvagn till servern, returnar response.data som är själva carten(dess innehåll) */
 export async function create(cart) {
     try{
         const response = await axios.post('/carts', cart);
@@ -43,7 +46,7 @@ export async function create(cart) {
         e?.response ? console.log(e.response.data) : console.log(e);
     }
 }
-
+/* Uppdaterar en kundvagn i databasen */
 export async function update(cart) {
     try{
         const response = await axios.put(`/carts/${cart.id}`, cart);
@@ -56,7 +59,7 @@ export async function update(cart) {
         e?.response ? console.log(e.response.data) : console.log(e);
     }
 }
-
+/* Tar bort en kundvagn i databasen, baserat på dess id */
 export async function remove(id, cart) {
     try{
         const response = await axios.delete(`/carts/${cart.id}`, { data: { id } });
@@ -70,7 +73,7 @@ export async function remove(id, cart) {
     }
 }
 
-
+/* Tar bort en produkt från en kundvagn i databasen, baserat på cartId och productId */
 export async function removeCartProduct(cartId, productId) {
     try {
         const response = await axios.delete(`/carts/${cartId}/removeProduct/${productId}`);
@@ -84,7 +87,7 @@ export async function removeCartProduct(cartId, productId) {
         e?.response ? console.log(e.response.data) : console.log(e);
     }
 }
-
+/* Skapar en tom kundvagn */
 export const createEmptyCart = async () => {
     try {
       
@@ -103,7 +106,7 @@ export const createEmptyCart = async () => {
     }
   };
 
-
+/* Lägger till en produkt i cart baserat på cartId i databasen */
   export async function addProduct(cartId, product) {
     await axios.put(`/carts/${cartId}`, {
         id: cartId,

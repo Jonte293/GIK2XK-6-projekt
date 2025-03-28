@@ -9,6 +9,10 @@ import {
   CardMedia,
 } from '@mui/material';
 
+/*Denna komponent visar produkterna i kundvagnen, här skapas även funktionen att ta bort en produkt
+  från kundvagnen eller ändra quantity */
+
+  /*handleQuantityChange gör att man kan ändra quantity(denna fick vi hjälp av chatGPT att fixa till) */
 function CartProduct({ cart, updateCart }) {
   const handleQuantityChange = async (product, quantityChange) => {
     const updatedProducts = cart.products.map((p) =>
@@ -16,31 +20,31 @@ function CartProduct({ cart, updateCart }) {
         ? { ...p, quantity: Math.max(1, p.quantity + quantityChange) }
         : p
     );
-
+    /*Skapar en uppdaterad cart */
     const updatedCart = { ...cart, products: updatedProducts };
-
+    /* Carten uppdateras om idt finns */
     if (updatedCart.id) {
       await update(updatedCart);
-      console.log('Updated cart after quantity change:', updatedCart);
+      console.log('Uppdaterade kundvagnens kvantitet:', updatedCart);
     } else {
-      console.error('No valid cartId found');
+      console.error('cartId finns inte');
     }
     updateCart(updatedCart);
   };
-
+  /*Funktion som tar bort en produkt från cart, removeCartProduct skickar begäran till backend
+    för att ta bort produkten från cart */
   async function onProductDelete(productToDelete) {
-    console.log('🛑 Försöker radera produkt:', productToDelete);
 
     if (!productToDelete || !productToDelete.id) {
-      console.error('❌ Fel: Produkt saknar id!', productToDelete);
+      console.error('Produkten saknar id', productToDelete);
       return;
     }
 
     try {
       await removeCartProduct(cart.id, productToDelete.id);
-      console.log('✅ Produkt borttagen:', productToDelete);
+      console.log('Produkt borttagen:', productToDelete);
 
-      // ✅ Uppdatera state direkt så att produkten försvinner från listan
+      /*Uppdaterar carten så att produkten försvinner */
       const updatedCart = {
         ...cart,
         products: cart.products.filter(
@@ -49,10 +53,10 @@ function CartProduct({ cart, updateCart }) {
       };
       updateCart(updatedCart);
     } catch (error) {
-      console.error('❌ Fel vid borttagning:', error);
+      console.error('Fel vid borttagning:', error);
     }
   }
-
+  /*Returnar hur carten ska visas, med hjälp av komponenter från mui */
   return (
     <Paper sx={{ my: 4, p: 4, borderRadius: 2 }} elevation={3}>
       {cart ? (

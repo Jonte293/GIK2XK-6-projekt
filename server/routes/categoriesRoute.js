@@ -1,37 +1,7 @@
 const router = require('express').Router();
 const db = require('../models');
 const productService = require('../services/productService');
-
-/* router.get('/:name/categories', (req, res) => {
-  const name = req.params.name;
-  productService.getByCategory(name).then((result) => {
-    res.status(result.status).json(result.data);
-  });
-});
- */
-
-/* router.get('/:categoryName', 
-  async (req, res) => {
-    try{
-        const categoryName = req.params.categoryName;
-        const result = await productService.getByCategory(categoryName);
-        res.status(result.status).json(result.data);
-      } catch (error) {
-        res.status(500).json({ error: 'Något gick fel vid hämtning av produkter per kategori.'});
-      }
-}); */
-
-/* router.get('/:id/categories', 
-  async (req, res) => {
-    try{
-        const id = req.params.id;
-        const result = await productService.getByCategory(categoryName);
-        res.status(result.status).json(result.data);
-      } catch (error) {
-        res.status(500).json({ error: 'Något gick fel vid hämtning av produkter per kategori.'});
-      }
-});
- */
+/* Hämtar produkter baserat på dess categoryId, med hjälp av getByCategory från productService */
 router.get('/:id/products', (req, res) => {
   const id = req.params.id;
 
@@ -40,15 +10,14 @@ router.get('/:id/products', (req, res) => {
   });
 });
 
-
-
-
+/*Hämtar alla kategorier */
 router.get('/', (req, res) => {
   db.category.findAll().then((result) => {
     res.send(result);
   });
 });
 
+/*Skapar en kategori */
 router.post('/', (req, res) => {
     const category = req.body;
     db.category.create(category).then((result) => {
@@ -56,13 +25,14 @@ router.post('/', (req, res) => {
     });
   });
 
+  /*Tar bort en kategori */
 router.delete('/', (req, res) => {
   db.category
     .destroy({
       where: { id: req.body.id }
     })
     .then(() => {
-      res.json(`Inlägget raderades`);
+      res.json(`Kategorin raderades`);
     });
 });
 

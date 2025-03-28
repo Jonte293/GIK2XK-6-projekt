@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 
+/* En banner-komponent till hemsidan som använder Box- och Typography-komponenter från mui */
 export default function HomeBanner({ title, image, text, text2}) {
   return (
     <Box
@@ -14,7 +15,6 @@ export default function HomeBanner({ title, image, text, text2}) {
         padding: 0,
         margin: 0,
         flexGrow: 1,
-        /*                 backgroundColor: 'rgb(231, 71, 60)',  */
         color: 'rgb(255, 255, 255)',
         textShadow: '2px 2px 3px black',
       }}
@@ -33,7 +33,6 @@ export default function HomeBanner({ title, image, text, text2}) {
           variant='h2'
           sx={{
             m: 4,
-            /* fontWeight: 'bold', */
             fontSize: 50,
           }}
         >

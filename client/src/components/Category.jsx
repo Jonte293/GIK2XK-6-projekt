@@ -6,6 +6,7 @@ import CakeIcon from '@mui/icons-material/Cake';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 
+/* Används för att returnera rätt ikon baserat på kategorinamnet, ikonenrna importeras från mui */
 const getIcon = (label) => {
   switch (label.toLowerCase()) {
     case 'energidryck':
@@ -23,6 +24,7 @@ const getIcon = (label) => {
   }
 };
 
+/* En komponent som visar en länk till kategorier, använder reacts Link, importerar chip från mui */
 function Category({ id, text }) {
   return (
     <Link to={`/categories/${id}/products`}>

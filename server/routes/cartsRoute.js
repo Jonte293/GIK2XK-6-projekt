@@ -1,30 +1,21 @@
 const router = require('express').Router();
 const cartService = require('../services/cartService');
 const db = require('../models');
+/*Hämtar en cart baserat på dess id */
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
 
-/* router.post('/:id/addProduct', (req, res) => {
-    const product = req.body;
-    const id = req.params.id;
-  
-    cartService.create(id, product).then((result) => {
-      res.status(result.status).json(result.data);
-    });
-  }); */
-  
-  router.get('/:id', (req, res) => {
-    const id = req.params.id;
-  
-    cartService.getById(id).then((result) => {
-      res.status(result.status).json(result.data);
-    });
+  cartService.getById(id).then((result) => {
+    res.status(result.status).json(result.data);
   });
-  
-  router.get('/', (req, res) => {
-    cartService.getAll().then((result) => {
-      res.status(result.status).json(result.data);
-    });
+});
+/*Hämtar alla carts */
+router.get('/', (req, res) => {
+  cartService.getAll().then((result) => {
+    res.status(result.status).json(result.data);
   });
-  
+});
+/* Skapar en cart med hjälp av create från cartService */
 router.post('/', (req, res) => {
   const cart = req.body;
   cartService.create(cart).then((result) => {
@@ -32,13 +23,13 @@ router.post('/', (req, res) => {
   });
 });
 
-
+/* Uppdaterar en cart med hjälp av update från cartService, hämtar id från URL-parametern,
+   och cart-objektet från body */
 router.put('/:id', (req, res) => {
-  const cartId = req.params.id; // Hämtar id från URL-parametern
-  const updatedCart = req.body; // Hämtar hela cart-objektet från body
+  const cartId = req.params.id; 
+  const updatedCart = req.body; 
 
   cartService.update(updatedCart, cartId).then((result) => {
-      // Om uppdateringen lyckas
       if (result.status === 200) {
         res.status(200).json(result.data); 
     } else {
@@ -49,20 +40,16 @@ router.put('/:id', (req, res) => {
       res.status(500).json({ error: 'Internt serverfel.' });
   });
 });
-
+/*Tar bort produkt från cart, kollar om cart finns med findByPk, tar bort
+  den cartRow som har det cartIdt och det productIdt (vilket tar bort produkten)  */
 router.delete('/:cartId/removeProduct/:productId', async (req, res) => {
   try {
       const { cartId, productId } = req.params;
-      /* const { cartId } = req.params;
-      const { productId } = req.body;  */// Ta emot productId i request-body
-
       console.log(`Tar bort produkt ${productId} från kundvagn ${cartId}`);
 
-      // Kolla om kundvagnen finns
       const cart = await db.cart.findByPk(cartId);
-      if (!cart) return res.status(404).json({ error: "Cart not found" });
+      if (!cart) return res.status(404).json({ error: "Hittar inte kundvagn" });
 
-      // Ta bort produkten från kundvagnen (cartRow-tabellen)
       await db.cartRow.destroy({
           where: { cartId, productId }
       });
@@ -73,34 +60,12 @@ router.delete('/:cartId/removeProduct/:productId', async (req, res) => {
       res.status(500).json({ error: "Något gick fel" });
   }
 });
-
-/* router.delete('/', (req, res) => {
-  db.product
-    .destroy({
-      where: { id: req.body.id }
-    })
-    .then(() => {
-      res.json(`Produkten togs bort från kundvagnen`);
-    });
-}); */
-
-/* router.delete('/:cartId/removeProduct', (req, res) => {
-  const { cartId } = req.params;
-  const { productId } = req.body; // Get the productId from the request body
-  cartService.removeProductFromCart(cartId, productId).then((result) => {
+/* Tar bort en cart baserat på dess id, med hjälp av deleteCart från cartService */
+router.delete('/:id', (req, res) => {
+  const id = req.body.id;
+  cartService.deleteCart(id).then((result) => {
     res.status(result.status).json(result.data);
-  }).catch(error => {
-    console.error('Error removing product:', error);
-    res.status(500).json({ message: 'Det gick inte att ta bort produkten från kundvagnen' });
-});
-}); */
-
-  
-  router.delete('/:id', (req, res) => {
-    const id = req.body.id;
-    cartService.deleteCart(id).then((result) => {
-      res.status(result.status).json(result.data);
-    });
   });
+});
   
-  module.exports = router;
+module.exports = router;

@@ -1,5 +1,5 @@
 import axios from './api';
-
+/* Hämtar alla kategorier från databasen med hjälp av axios */
 export async function getAll() {
     try {
         const response = await axios.get('/categories');

@@ -3,6 +3,7 @@ const db = require('../models');
 const validate = require('validate.js');
 const userService = require('../services/userService');
 
+/*Sätter upp regler för att kontrollera så att data som skickas har korrekt format */
 const constraints = {
   email: {
     length: {
@@ -25,6 +26,7 @@ const constraints = {
   }
 };
 
+/*Hämtar carts baserat på userId, med hjälp av getByUser från userService */
 router.get('/:id/carts', (req, res) => {
   const id = req.params.id;
 
@@ -33,12 +35,14 @@ router.get('/:id/carts', (req, res) => {
   });
 });
 
+/*Hämtar alla carts */
 router.get('/', (req, res) => {
   db.user.findAll().then((result) => {
     res.send(result);
   });
 });
 
+/*Skapar en user */
 router.post('/', (req, res) => {
   const user = req.body;
   const invalidData = validate(user, constraints);
@@ -51,6 +55,7 @@ router.post('/', (req, res) => {
   }
 });
 
+/*Ändrar en user baserat på dess id */
 router.put('/', (req, res) => {
   const user = req.body;
   const invalidData = validate(user, constraints);
@@ -67,6 +72,8 @@ router.put('/', (req, res) => {
       });
   }
 });
+
+/*Tar bort en user baserat på dess id */
 router.delete('/', (req, res) => {
   db.user
     .destroy({

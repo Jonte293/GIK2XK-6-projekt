@@ -1,3 +1,4 @@
+/* Används för att göra HTTP-förfrågningar till servern */
 import axios from 'axios';
 
 axios.defaults.baseURL = "http://localhost:5000";
