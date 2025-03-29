@@ -22,7 +22,7 @@ function ProductItemLarge({ product }) {
       : 0;
   }, [product]);
 
-// returnera produkten i form av ett card innuti paper. där information om produkten hämtas och skrivs ut 
+// returnerar produkt i form av ett card innuti paper. där information om produkten hämtas och skrivs ut 
   return product ? (
     <Paper sx={{ my: 2, p: 4, borderRadius: 2 }} elevation={3}>
     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row-reverse' }}>
@@ -57,7 +57,6 @@ function ProductItemLarge({ product }) {
       Lägg vara i kundvagn:
     <AddToCartButton product={product}/>
     </Typography>
-  // Averagerating skrivs ut med Mui Rating 
     <Rating 
     sx={{mr: 5}}
     value={averageRating} precision={0.5} readOnly />

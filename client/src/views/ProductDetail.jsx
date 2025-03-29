@@ -14,21 +14,25 @@ import {
   Rating,
 } from '@mui/material';
 
+// View som visar detaljerad produktsida, tar in komponenterna ProductItemLarge för produkten,
+// RatingForm som är en formulär för att lämna betyg och rescension
+// använder product.rating.map för att skriva ut en lista av produktens recensioner
+
 function ProductDetail() {
+  // används för att hämta URL-parametrar
   const { id } = useParams();
+    // useState används för att hantera state i komponenter.
   const [product, setProduct] = useState(null);
 
-
+  // useEffect används för att köra kod när något ändras, i detta fall id
   useEffect(() => {
     getOne(id).then((product) => setProduct(product));
   }, [id]);
 
 
+// Funktion för att ta bort en recension, gör ett API anrop till funktionen removeRating
+// uppdaterar product state genom att ta bort betyg från ratings
   function onDelete(id) {
-    if (!id) {
-      console.error('Rating ID is undefined');
-      return;
-    }
     removeRating(id).then((response) => {
       setProduct((prevProduct) => ({
         ...prevProduct,
@@ -38,19 +42,22 @@ function ProductDetail() {
     });
   }
 
+  // Funktion som lägger till recension och uppdaterar produktinformationen
   function onRatingAdd(rating) {
     addRating(product.id, rating)
       .then(() => getOne(id))
       .then((updatedProduct) => {
-        console.log("Fetched updated product with new score:", updatedProduct);
         setProduct(updatedProduct);
       })
-      .catch((err) => {
-        console.error("Failed to add rating or fetch product:", err);
-      });
   }
 
   const navigate = useNavigate();
+
+  // returnerar all som vi vill ska synas i denna vy.
+  // ProductItemLarge visar detaljvyn för produkten
+  // Två knappar, en för att navigera tillbaka ett steg, en för att redigera produkten
+  // Ratingform för att lämna recensioner, samt en lista med produktens ratings/recensioner
+
   return product ? (
     <Container>
       <ProductItemLarge product={product} />
@@ -103,60 +110,3 @@ function ProductDetail() {
   );
 }
 export default ProductDetail;
-
-/* import ProductItemLarge from "../components/ProductItemLarge";
-import { Button} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import ReviewForm from "../components/ReviewForm";
-import Rating from "../components/Rating";
-
-function ProductDetail() {
-    const product = 
-    {
-        "id": 4,
-        "name": 'Nocco Ramonade',
-        "price": '20.00',
-        "description": null,
-        "imageUrl":
-          'https://www.sportkost.se/pub_images/original/nocco_focus_ramonade_330ml.jpg',
-        "createdAt": '2025-03-20T13:40:57.000Z',
-        "updatedAt": '2025-03-20T13:45:06.000Z',
-        "category": {
-            "id": 3,
-            "name": "Energi dryck"
-        },
-        "ratings": [
-            {
-                "score": 5,
-                "review": "Bästa flingerna!!!",
-                "user": "Pierre",
-                "createdAt": "2025-03-21T12:01:23.000Z"
-            },
-            {
-                "score": 4,
-                "review": "Sämsta flingerna!!!",
-                "user": "Pierre",
-                "createdAt": "2025-03-21T11:57:57.000Z"
-            }
-        ]
-    };
-
-    const navigate = useNavigate();
-    return ( 
-    <div>
-        <ProductItemLarge product={product}/>
-        <Button onClick={() => navigate(-1)}>Tillbaka</Button>
-        <Button onClick={() => navigate(`/products${product.id}/edit`)}>Edit</Button>
-        <Button>Lägg i varukorg</Button>
-        <ReviewForm />
-        {product.ratings && 
-            product.ratings.map((rating, i) => 
-        ( <Rating key={`rating_${i}`} rating={rating} />
-))}
-    </div>
-    )
-}
-
-
-export default ProductDetail;
- */

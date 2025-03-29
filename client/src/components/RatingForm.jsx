@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 
 function RatingForm({ onSave }) {
-  // rating håller den nuvarande rescensionen, setrating ändrar den
+  // rating håller den nuvarande rescensionen, setRating ändrar den
   // emptyRating används för att tömma formuläret
   const emptyRating = {
     review: '',

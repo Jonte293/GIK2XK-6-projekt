@@ -9,8 +9,6 @@ import { getAll } from '../services/CategoryService';
 function CategoryList() {
 
   console.log(useParams(), useLocation());
-  const location = useLocation();
-
 
   
   const [categories, setCategories] = useState([]);

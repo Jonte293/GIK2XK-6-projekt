@@ -1,5 +1,7 @@
 use webshop;
 
+// Inserts i alla tabeller, denna fil är genererad med hjälp av ChatGPT
+
 -- 1. Användare (users)
 INSERT INTO users (email, username, first_name, last_name, password, created_at, updated_at)
 VALUES
